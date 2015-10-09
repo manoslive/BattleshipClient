@@ -31,7 +31,6 @@ namespace BattleShip_Client
             char lettre = 'A';
             dgv.RowHeadersWidth = 55;
 
-
             for (int i = 0; i < 10; i++)
             {
                 if (dgv.Rows.Count != 0)

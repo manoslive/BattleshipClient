@@ -14,6 +14,7 @@ namespace BattleShip_Client
     {
         private int casesRestantes = 0;
         private bool basEstDisponible = true, hautEstDisponible = true, droiteEstDisponible = true, gaucheEstDisponible = true;
+        private int direction = 0;
 
         DataGridViewCell derniereCellule;
 
@@ -25,6 +26,7 @@ namespace BattleShip_Client
         private void PositionBateaux_Load(object sender, EventArgs e)
         {
             remplirDgv(DGV_Choix);
+            BTN_Jouer.Enabled = false;
         }
         private void remplirDgv(DataGridView dgv)
         {
@@ -43,63 +45,48 @@ namespace BattleShip_Client
             }
             dgv.AllowUserToAddRows = false;
         }
-
+        private void SetJouerTrue()
+        {
+            if (RB_PorteAvion.Enabled == false
+                && RB_Croiseur.Enabled == false
+                && RB_CTorpilleur.Enabled == false
+                && RB_SousMarin.Enabled == false
+                && RB_Torpilleur.Enabled == false)
+                BTN_Jouer.Enabled = true;
+        }
         private void DGV_Choix_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (RB_PorteAvion.Checked)
+            changerCell(e);
+            if (casesRestantes == 0 && RB_PorteAvion.Checked)
             {
-                if (casesRestantes != 0)
-                {
-                    changerCell();
-                }
-                else
-                {
-                    RB_PorteAvion.Enabled = false;
-                }
+                RB_PorteAvion.Enabled = false;
+                DGV_Choix.Enabled = false;
+                SetJouerTrue();
             }
-            if (RB_Croiseur.Checked)
+
+            if (casesRestantes == 0 && RB_Croiseur.Checked)
             {
-                if (casesRestantes != 0)
-                {
-                    changerCell();
-                }
-                else
-                {
-                    RB_Croiseur.Enabled = false;
-                }
+                RB_Croiseur.Enabled = false;
+                DGV_Choix.Enabled = false;
+                SetJouerTrue();
             }
-            if (RB_CTorpilleur.Checked)
+            if (casesRestantes == 0 && RB_CTorpilleur.Checked)
             {
-                if (casesRestantes != 0)
-                {
-                    changerCell();
-                }
-                else
-                {
-                    RB_CTorpilleur.Enabled = false;
-                }
+                RB_CTorpilleur.Enabled = false;
+                DGV_Choix.Enabled = false;
+                SetJouerTrue();
             }
-            if (RB_SousMarin.Checked)
+            if (casesRestantes == 0 && RB_SousMarin.Checked)
             {
-                if (casesRestantes != 0)
-                {
-                    changerCell();
-                }
-                else
-                {
-                    RB_SousMarin.Enabled = false;
-                }
+                RB_SousMarin.Enabled = false;
+                DGV_Choix.Enabled = false;
+                SetJouerTrue();
             }
-            if (RB_Torpilleur.Checked)
+            if (casesRestantes == 0 && RB_Torpilleur.Checked)
             {
-                if (casesRestantes != 0)
-                {
-                    changerCell();
-                }
-                else
-                {
-                    RB_Torpilleur.Enabled = false;
-                }
+                RB_Torpilleur.Enabled = false;
+                DGV_Choix.Enabled = false;
+                SetJouerTrue();
             }
         }
 
@@ -130,6 +117,81 @@ namespace BattleShip_Client
             casesRestantes = 3;
             TB_CasesRestantes.Text = casesRestantes.ToString();
         }
+        private void DGV_Choix_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            SetAllDirectionsTrue();
+            int rangee = e.RowIndex;
+            int colonne = e.ColumnIndex;
+            verifierPosibiliteOver(rangee, colonne);
+            switch(direction)
+            {
+                case 0: //vers la droite
+                    if (droiteEstDisponible)
+                    {
+                        if ((colonne + casesRestantes - 1) < 10 && colonne >=0 && rangee >= 0)
+                        {
+                            for(int i = 0; i < (casesRestantes); i++)
+                            {
+                                DGV_Choix.Rows[rangee].Cells[colonne + i].Selected = true;
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    if (basEstDisponible)
+                    {
+                        if ((rangee + casesRestantes - 1) < 10 && colonne > 0)
+                        {
+                            for (int i = 0; i < (casesRestantes); i++)
+                            {
+                                DGV_Choix.Rows[rangee + i].Cells[colonne].Selected = true;
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    if (gaucheEstDisponible)
+                    {
+                        if ((colonne - (casesRestantes - 1)) >= 0 && rangee < 10)
+                        {
+                            for (int i = 0; i < (casesRestantes); i++)
+                            {
+                                DGV_Choix.Rows[rangee].Cells[colonne - i].Selected = true;
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    if (hautEstDisponible)
+                    {
+                        if ((rangee - (casesRestantes - 1)) >= 0 && colonne < 10)
+                        {
+                            for (int i = 0; i < (casesRestantes); i++)
+                            {
+                                DGV_Choix.Rows[rangee - i].Cells[colonne].Selected = true;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    if (droiteEstDisponible)
+                    {
+                        if ((colonne + casesRestantes - 1) < 10 && rangee > 0)
+                        {
+                            for (int i = 0; i < (casesRestantes); i++)
+                            {
+                                DGV_Choix.Rows[rangee].Cells[colonne + i].Selected = true;
+                            }
+                        }
+                    }
+                    break;
+            }                
+        }
+
+        private void DGV_Choix_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            DGV_Choix.ClearSelection();
+        }
 
         private void RB_Torpilleur_CheckedChanged(object sender, EventArgs e)
         {
@@ -137,14 +199,129 @@ namespace BattleShip_Client
             casesRestantes = 2;
             TB_CasesRestantes.Text = casesRestantes.ToString();
         }
-        private void changerCell()
+
+        private void PositionBateaux_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (ModifierKeys == Keys.Shift)
+            {
+                if (direction < 3)
+                    direction++;
+                else
+                    direction = 0;
+            }
+        }
+
+        private void changerCell(DataGridViewCellEventArgs e)
         {
             if (!DGV_Choix.CurrentCell.Value.Equals("X"))
             {
-                DGV_Choix.CurrentCell.Value = "X";
-                casesRestantes--;
-                TB_CasesRestantes.Text = casesRestantes.ToString();
-                derniereCellule = DGV_Choix.CurrentCell;
+                int rangee = e.RowIndex;
+                int colonne = e.ColumnIndex;
+                switch (direction)
+                {
+                    case 0: //vers la droite
+                        if (droiteEstDisponible)
+                        {
+                            if ((colonne + casesRestantes - 1) < 10 && rangee >= 0)
+                            {
+                                for (int i = 0; i < (casesRestantes); i++)
+                                {
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = 'X';
+                                }
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (basEstDisponible)
+                        {
+                            if ((rangee + casesRestantes - 1) < 10 && colonne > 0)
+                            {
+                                for (int i = 0; i < (casesRestantes); i++)
+                                {
+                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Value = 'X';
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        if (gaucheEstDisponible)
+                        {
+                            if ((colonne - (casesRestantes - 1)) >= 0 && rangee < 10)
+                            {
+                                for (int i = 0; i < (casesRestantes); i++)
+                                {
+                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Value = 'X';
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (hautEstDisponible)
+                        {
+                            if ((rangee - (casesRestantes - 1)) >= 0 && colonne < 10)
+                            {
+                                for (int i = 0; i < (casesRestantes); i++)
+                                {
+                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Value = 'X';
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        if (droiteEstDisponible)
+                        {
+                            if ((colonne + casesRestantes - 1) < 10 && rangee > 0)
+                            {
+                                for (int i = 0; i < (casesRestantes); i++)
+                                {
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = 'X';
+                                }
+                            }
+                        }
+                        break;
+                }
+                //DGV_Choix.CurrentCell.Value = "X";
+                /*for(int i=0; i< DGV_Choix.SelectedCells.Count; i++)
+                {
+                    DGV_Choix.SelectedCells[i].Value = "X";
+                    casesRestantes--;
+                }
+                TB_CasesRestantes.Text = casesRestantes.ToString();*/
+                //derniereCellule = DGV_Choix.CurrentCell;
+                casesRestantes = 0;
+            }
+        }
+        private void SetAllDirectionsTrue()
+        {
+            basEstDisponible = true;
+            hautEstDisponible = true;
+            droiteEstDisponible = true;
+            gaucheEstDisponible = true;
+        }
+        private void verifierPosibiliteOver(int rangee, int colonne)
+        {
+            for (int i = 0; i < casesRestantes; i++)
+            {
+                if (rangee + i < 10 && rangee >=0 && colonne >= 0)
+                {
+                    if (!DGV_Choix.Rows[rangee + i].Cells[colonne].Value.Equals("")) // Vers le bas
+                        basEstDisponible = false;
+                }
+                if (rangee - i > 0 && colonne >= 0)
+                {
+                    if (!DGV_Choix.Rows[rangee - i].Cells[colonne].Value.Equals("")) // Vers le haut
+                        hautEstDisponible = false;
+                }
+                if (colonne + i < 10 && colonne >=0 && rangee >= 0)
+                {
+                    if (!DGV_Choix.Rows[rangee].Cells[colonne + i].Value.Equals("")) // Vers la droite
+                        droiteEstDisponible = false;
+                }
+                if (colonne - i > 0 && rangee >= 0)
+                {
+                    if (!DGV_Choix.Rows[rangee].Cells[colonne - i].Value.Equals("")) // Vers la gauche
+                        gaucheEstDisponible = false;
+                }
             }
         }
         private void verifierPosibilite(DataGridViewCell cell)

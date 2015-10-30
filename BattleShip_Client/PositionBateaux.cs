@@ -140,7 +140,7 @@ namespace BattleShip_Client
                 case 1:
                     if (basEstDisponible)
                     {
-                        if ((rangee + casesRestantes - 1) < 10 && colonne > 0)
+                        if ((rangee + casesRestantes - 1) < 10 && rangee >=0 && colonne >= 0)
                         {
                             for (int i = 0; i < (casesRestantes); i++)
                             {
@@ -152,7 +152,7 @@ namespace BattleShip_Client
                 case 2:
                     if (gaucheEstDisponible)
                     {
-                        if ((colonne - (casesRestantes - 1)) >= 0 && rangee < 10)
+                        if ((colonne - (casesRestantes - 1)) >= 0 && rangee >=0 && rangee < 10)
                         {
                             for (int i = 0; i < (casesRestantes); i++)
                             {
@@ -164,7 +164,7 @@ namespace BattleShip_Client
                 case 3:
                     if (hautEstDisponible)
                     {
-                        if ((rangee - (casesRestantes - 1)) >= 0 && colonne < 10)
+                        if ((rangee - (casesRestantes - 1)) >= 0 && colonne >= 0 && colonne < 10)
                         {
                             for (int i = 0; i < (casesRestantes); i++)
                             {
@@ -234,7 +234,7 @@ namespace BattleShip_Client
                     case 1:
                         if (basEstDisponible)
                         {
-                            if ((rangee + casesRestantes - 1) < 10 && colonne > 0)
+                            if ((rangee + casesRestantes - 1) < 10 && colonne >= 0)
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {

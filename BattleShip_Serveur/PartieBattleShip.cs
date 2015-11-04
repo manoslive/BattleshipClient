@@ -88,7 +88,7 @@ namespace BattleShip_Serveur
         private string analyserAttaque(string attaque, List<Bateau> listeBateau)
         {
             string[] tabAttaque = attaque.Split(' ');
-            Point coordonnee = new Point(Int32.Parse(tabAttaque[1]), Int32.Parse(tabAttaque[1]));
+            Point coordonnee = new Point(Int32.Parse(tabAttaque[0]), Int32.Parse(tabAttaque[1]));
             bool bateauToucher = false;
             for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
             {

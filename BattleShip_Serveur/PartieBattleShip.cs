@@ -6,6 +6,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BattleShip_Classes;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Drawing;
 
 namespace BattleShip_Serveur
 {
@@ -14,8 +18,8 @@ namespace BattleShip_Serveur
         public Thread thread;
         Socket joueur1;
         Socket joueur2;
-        string[] tabJ1;
-        string[] tabJ2;
+        Flotte flotteJ1 = null;
+        Flotte flotteJ2 = null;
 
         /// <summary>
         ///  Constructeur paramétrique
@@ -27,40 +31,6 @@ namespace BattleShip_Serveur
             thread = new Thread(new ThreadStart(Run));
             joueur1 = socketJ1;
             joueur2 = socketJ2;
-        }
-
-        /// <summary>
-        /// Fonction principale pour jouer
-        /// </summary>
-        public void Run()
-        {
-            try
-            {
-                // Recoit la position des bateaux de chaque joueur et l'affecte à une variable globale
-                tabJ1 = recevoirPositionBateaux(joueur1);
-                tabJ2 = recevoirPositionBateaux(joueur2);
-
-                // Envoie de l'ordre de jeu des joueurs ainsi que l'ip de son opposant
-                envoyerReponse("1 " + (joueur2.RemoteEndPoint as IPEndPoint).Address, joueur1);
-                envoyerReponse("2 " + (joueur1.RemoteEndPoint as IPEndPoint).Address, joueur2);
-
-                // Boucle du jeu
-                while (BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
-                {
-                    envoyerReponse(analyserAttaque(recevoirAttaque(joueur1)), joueur1);
-                    if (verifierSiBateauxRestants(joueur2))
-                    {
-                        envoyerReponse(analyserAttaque(recevoirAttaque(joueur2)), joueur2);
-                    }
-                }
-                // lorsque la partie est terminée, on termine la connection
-                joueur1.Close();
-                joueur2.Close();
-            }
-            catch (Exception e)
-            {
-
-            }
         }
 
         /// <summary>
@@ -76,6 +46,7 @@ namespace BattleShip_Serveur
 
         /// <summary>
         /// Envoie de la réponse aux 2 joueurs
+        /// dans le cas d'une victoire d'un des 2 joueurs
         /// </summary>
         /// <param name="reponse"></param>
         private void envoyerReponse(string reponse)
@@ -83,9 +54,27 @@ namespace BattleShip_Serveur
             byte[] dataJ1;
             byte[] dataJ2;
 
-            dataJ1 = Encoding.ASCII.GetBytes(reponse);
-            dataJ2 = Encoding.ASCII.GetBytes(reponse);
+            // Si le joueur1 a gagné on envoie les réponses correspondante
+            if(flotteJ1.FlotteEstVivante())
+            {
+                dataJ1 = Encoding.ASCII.GetBytes(reponse + " 1");
+                dataJ2 = Encoding.ASCII.GetBytes(reponse + " 0");
+            }
 
+            // Si le joueur2 a gagné on envoie les réponses correspondante
+            if(flotteJ2.FlotteEstVivante())
+            {
+                dataJ1 = Encoding.ASCII.GetBytes(reponse + " 0");
+                dataJ2 = Encoding.ASCII.GetBytes(reponse + " 1");
+            }
+
+            else
+            {
+                dataJ1 = Encoding.ASCII.GetBytes(reponse);
+                dataJ2 = Encoding.ASCII.GetBytes(reponse);
+            }
+
+            // Envoie des l'information
             joueur1.Send(dataJ1);
             joueur2.Send(dataJ2);
         }
@@ -94,30 +83,40 @@ namespace BattleShip_Serveur
         /// Analyse de la string d'attaque
         /// </summary>
         /// <param name="attaque"></param>
-        /// <param name="joueur"></param>
+        /// <param name="listeBateau"></param>
         /// <returns></returns>
-        private string analyserAttaque(string attaque, Socket joueur)
+        private string analyserAttaque(string attaque, List<Bateau> listeBateau)
         {
             string[] tabAttaque = attaque.Split(' ');
-            // devra comparer le tableau d'attaque et le tab initial
-            for (int i = 0; i < tabAttaque.Count(); i++)
+            Point coordonnee = new Point(Int32.Parse(tabAttaque[1]), Int32.Parse(tabAttaque[1]));
+            bool bateauToucher = false;
+            for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
             {
-                if (tabAttaque[i].Equals('X'))
+                // Si un bateau de la liste contient la coordonnée
+                if(listeBateau[i]._position.Contains(coordonnee))
                 {
-                    if (joueur == joueur1)
+                    bool rechercheTerminer = false;
+                    for(int j = 0; j < listeBateau[i]._estVivant.Length && !rechercheTerminer; ++j)
                     {
-                        if (tabJ1[i].Equals('A') || tabJ1[i].Equals('B') || tabJ1[i].Equals('C') || tabJ1[i].Equals('D') || tabJ1[i].Equals('E'))
+                        // Si la case du bateau n'est pas touchée
+                        if(listeBateau[i]._estVivant[j])
                         {
-
+                            listeBateau[i]._estVivant[j] = false;
+                            rechercheTerminer = true;
+                            // Si le bateau est coulé
+                            if(!listeBateau[i].BateauEstVivant())
+                            {
+                                bateauToucher = !bateauToucher;
+                                // Le format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque + " " + le nom du bateau coulé
+                                return bateauToucher.ToString() + " " + attaque + " " + listeBateau[i]._nom;
+                            }
                         }
                     }
-                    else if (joueur == joueur2)
-                    {
-
-                    }
+                    bateauToucher = !bateauToucher;
                 }
             }
-            return null;
+            // Format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque
+            return bateauToucher.ToString() + " " + attaque;
         }
 
         /// <summary>
@@ -143,15 +142,12 @@ namespace BattleShip_Serveur
         }
 
         /// <summary>
-        /// Recoit la position des bateaux, la convertie en string, la sépare
-        /// et l'affecte au tableau du joueur correspondant
-        /// correspondant
         /// </summary>
         /// <param name="joueur"></param>
         /// <returns></returns>
-        private string[] recevoirPositionBateaux(Socket joueur)
+        private Flotte recevoirPositionBateaux(Socket joueur)
         {
-            string stringJoueur;
+            Flotte flotte = null;
             byte[] buffer = new byte[joueur.SendBufferSize];
             int byteLecture = joueur.Receive(buffer);
             byte[] byteFormatter = new byte[byteLecture];
@@ -160,48 +156,44 @@ namespace BattleShip_Serveur
             {
                 byteFormatter[i] = buffer[i];
             }
-            stringJoueur = Encoding.ASCII.GetString(byteFormatter);
-            string[] tabStringJoueur = stringJoueur.Split(' ');
-            return tabStringJoueur;
+            // Désérialisation du byte[] en Flotte
+            BinaryFormatter recevoir = new BinaryFormatter();
+            using (var stream = new MemoryStream(byteFormatter))
+            {
+                flotte = recevoir.Deserialize(stream) as Flotte;
+            }
+            return flotte;
         }
 
         /// <summary>
-        /// Parcourt le tableau pour vérifier s'il contient des bateaux non coulés
+        /// Fonction principale pour jouer
         /// </summary>
-        /// <param name="joueur"></param>
-        /// <returns></returns>
-        private bool verifierSiBateauxRestants(Socket joueur)
+        public void Run()
         {
-            bool aBateauxRestants = true;
-            if (joueur == joueur1)
+            try
             {
-                foreach (string element in tabJ1)
+                // Recoit la position des bateaux de chaque joueur et l'affecte à une variable globale
+                flotteJ1 = recevoirPositionBateaux(joueur1);
+                flotteJ2 = recevoirPositionBateaux(joueur2);
+
+                // Envoie de l'ordre de jeu des joueurs ainsi que l'ip de son opposant
+                envoyerReponse("1 " + (joueur2.RemoteEndPoint as IPEndPoint).Address, joueur1);
+                envoyerReponse("2 " + (joueur1.RemoteEndPoint as IPEndPoint).Address, joueur2);
+
+                // Boucle du jeu
+                while (flotteJ1.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
                 {
-                    if (element.Contains('X') || element.Contains('0'))
+                    envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ1.flotte));
+                    if (flotteJ2.FlotteEstVivante())
                     {
-                        aBateauxRestants = true;
-                    }
-                    else
-                    {
-                        aBateauxRestants = false;
+                        envoyerReponse(analyserAttaque(recevoirAttaque(joueur2), flotteJ1.flotte));
                     }
                 }
+                // lorsque la partie est terminée, on termine la connection
+                joueur1.Close();
+                joueur2.Close();
             }
-            else if (joueur == joueur2)
-            {
-                foreach (string element in tabJ2)
-                {
-                    if (element.Contains('X') || element.Contains('0'))
-                    {
-                        aBateauxRestants = true;
-                    }
-                    else
-                    {
-                        aBateauxRestants = false;
-                    }
-                }
-            }
-            return aBateauxRestants;
+            catch (Exception e) { }
         }
     }
 }

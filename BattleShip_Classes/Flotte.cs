@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BattleShip_Classes
 {
-    class Flotte
+    [Serializable]
+    public class Flotte
     {
         public List<Bateau> flotte { get; private set; }
         

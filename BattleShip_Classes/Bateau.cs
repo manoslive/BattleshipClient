@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace BattleShip_Classes
 {
+    [Serializable]
     public class Bateau
     {
         public string _nom { get; private set; }

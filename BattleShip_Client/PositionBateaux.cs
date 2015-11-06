@@ -433,7 +433,9 @@ namespace BattleShip_Client
         }
         private void DemarrerPartie()
         {
-            throw new NotImplementedException();
+            TableauAttaque partie = new TableauAttaque(DGV_Choix);
+            partie.ShowDialog();
+            
         }
         private void RemplirFlotte()
         {

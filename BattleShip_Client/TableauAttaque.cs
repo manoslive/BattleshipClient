@@ -12,8 +12,10 @@ namespace BattleShip_Client
 {
     public partial class TableauAttaque : Form
     {
-        public TableauAttaque()
+        public TableauAttaque(DataGridView mesBateaux)
         {
+            DGV_Perso = mesBateaux;
+            // DGV_Perso = CopyDataGridView(mesBateaux);
             InitializeComponent();
         }
 
@@ -30,7 +32,6 @@ namespace BattleShip_Client
         private void Form1_Load(object sender, EventArgs e)
         {
             remplirDgv(DGV_Attaque);
-            remplirDgv(DGV_Perso);  
         }
 
         private void remplirDgv(DataGridView dgv)
@@ -42,7 +43,7 @@ namespace BattleShip_Client
             {
                 if (dgv.Rows.Count != 0)
                 {
-                    dgv.Rows.Add("0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
+                    dgv.Rows.Add("", "", "", "", "", "", "", "", "", "");
 
                     dgv.Rows[i].HeaderCell.Value = lettre.ToString();
                     lettre = (Char)(Convert.ToUInt16(lettre) + 1);
@@ -54,6 +55,43 @@ namespace BattleShip_Client
         private void DGV_Perso_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private DataGridView CopyDataGridView(DataGridView dgv_org)
+        {
+            DataGridView dgv_copy = new DataGridView();
+            try
+            {
+                if (dgv_copy.Columns.Count == 0)
+                {
+                    foreach (DataGridViewColumn dgvc in dgv_org.Columns)
+                    {
+                        dgv_copy.Columns.Add(dgvc.Clone() as DataGridViewColumn);
+                    }
+                }
+
+                DataGridViewRow row = new DataGridViewRow();
+
+                for (int i = 0; i < dgv_org.Rows.Count; i++)
+                {
+                    row = (DataGridViewRow)dgv_org.Rows[i].Clone();
+                    int intColIndex = 0;
+                    foreach (DataGridViewCell cell in dgv_org.Rows[i].Cells)
+                    {
+                        row.Cells[intColIndex].Value = cell.Value;
+                        intColIndex++;
+                    }
+                    dgv_copy.Rows.Add(row);
+                }
+                dgv_copy.AllowUserToAddRows = false;
+                dgv_copy.Refresh();
+
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            return dgv_copy;
         }
     }
 }

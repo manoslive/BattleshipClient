@@ -29,6 +29,16 @@
         private void InitializeComponent()
         {
             this.DGV_Choix = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LB_Position = new System.Windows.Forms.Label();
             this.BTN_Jouer = new System.Windows.Forms.Button();
             this.LB_ListeBateaux = new System.Windows.Forms.Label();
@@ -41,16 +51,6 @@
             this.LB_CasesRestantes = new System.Windows.Forms.Label();
             this.TB_CasesRestantes = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Choix)).BeginInit();
             this.GB_ListeBateaux.SuspendLayout();
             this.SuspendLayout();
@@ -84,6 +84,87 @@
             this.DGV_Choix.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Choix_CellMouseEnter);
             this.DGV_Choix.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Choix_CellMouseLeave);
             // 
+            // Column1
+            // 
+            this.Column1.Frozen = true;
+            this.Column1.HeaderText = "1";
+            this.Column1.MinimumWidth = 2;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 38;
+            // 
+            // Column2
+            // 
+            this.Column2.Frozen = true;
+            this.Column2.HeaderText = "2";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Width = 38;
+            // 
+            // Column3
+            // 
+            this.Column3.Frozen = true;
+            this.Column3.HeaderText = "3";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 38;
+            // 
+            // Column4
+            // 
+            this.Column4.Frozen = true;
+            this.Column4.HeaderText = "4";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.Width = 38;
+            // 
+            // Column5
+            // 
+            this.Column5.Frozen = true;
+            this.Column5.HeaderText = "5";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.Width = 38;
+            // 
+            // Column6
+            // 
+            this.Column6.Frozen = true;
+            this.Column6.HeaderText = "6";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            this.Column6.Width = 38;
+            // 
+            // Column7
+            // 
+            this.Column7.Frozen = true;
+            this.Column7.HeaderText = "7";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            this.Column7.Width = 38;
+            // 
+            // Column8
+            // 
+            this.Column8.Frozen = true;
+            this.Column8.HeaderText = "8";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            this.Column8.Width = 38;
+            // 
+            // Column9
+            // 
+            this.Column9.Frozen = true;
+            this.Column9.HeaderText = "9";
+            this.Column9.Name = "Column9";
+            this.Column9.ReadOnly = true;
+            this.Column9.Width = 38;
+            // 
+            // Column10
+            // 
+            this.Column10.Frozen = true;
+            this.Column10.HeaderText = "10";
+            this.Column10.Name = "Column10";
+            this.Column10.ReadOnly = true;
+            this.Column10.Width = 44;
+            // 
             // LB_Position
             // 
             this.LB_Position.AutoSize = true;
@@ -104,6 +185,7 @@
             this.BTN_Jouer.TabIndex = 3;
             this.BTN_Jouer.Text = "Jouer";
             this.BTN_Jouer.UseVisualStyleBackColor = true;
+            this.BTN_Jouer.Click += new System.EventHandler(this.BTN_Jouer_Click);
             // 
             // LB_ListeBateaux
             // 
@@ -224,87 +306,6 @@
             this.label1.Size = new System.Drawing.Size(203, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "*Shift pour changer la direction du bateau";
-            // 
-            // Column1
-            // 
-            this.Column1.Frozen = true;
-            this.Column1.HeaderText = "1";
-            this.Column1.MinimumWidth = 2;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 38;
-            // 
-            // Column2
-            // 
-            this.Column2.Frozen = true;
-            this.Column2.HeaderText = "2";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Width = 38;
-            // 
-            // Column3
-            // 
-            this.Column3.Frozen = true;
-            this.Column3.HeaderText = "3";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 38;
-            // 
-            // Column4
-            // 
-            this.Column4.Frozen = true;
-            this.Column4.HeaderText = "4";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            this.Column4.Width = 38;
-            // 
-            // Column5
-            // 
-            this.Column5.Frozen = true;
-            this.Column5.HeaderText = "5";
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.Width = 38;
-            // 
-            // Column6
-            // 
-            this.Column6.Frozen = true;
-            this.Column6.HeaderText = "6";
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            this.Column6.Width = 38;
-            // 
-            // Column7
-            // 
-            this.Column7.Frozen = true;
-            this.Column7.HeaderText = "7";
-            this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
-            this.Column7.Width = 38;
-            // 
-            // Column8
-            // 
-            this.Column8.Frozen = true;
-            this.Column8.HeaderText = "8";
-            this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
-            this.Column8.Width = 38;
-            // 
-            // Column9
-            // 
-            this.Column9.Frozen = true;
-            this.Column9.HeaderText = "9";
-            this.Column9.Name = "Column9";
-            this.Column9.ReadOnly = true;
-            this.Column9.Width = 38;
-            // 
-            // Column10
-            // 
-            this.Column10.Frozen = true;
-            this.Column10.HeaderText = "10";
-            this.Column10.Name = "Column10";
-            this.Column10.ReadOnly = true;
-            this.Column10.Width = 44;
             // 
             // PositionBateaux
             // 

@@ -1,9 +1,14 @@
-﻿using System;
+﻿using BattleShip_Classes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,11 +17,25 @@ namespace BattleShip_Client
 {
     public partial class PositionBateaux : Form
     {
+        // Variables
         private int casesRestantes = 0;
         private bool basEstDisponible = true, hautEstDisponible = true, droiteEstDisponible = true, gaucheEstDisponible = true;
         private int direction = 0;
-
+        private static Socket socket;
         DataGridViewCell derniereCellule;
+        private IPEndPoint localEndPoint;
+        private const string ip = "127.0.0.1";
+        private const int port = 666;
+        private List<Bateau> _bateaux = new List<Bateau>();
+        private List<int> _positions = new List<int>();
+        private Flotte flotte = null;
+
+        // Nom des bateaux
+        const string bateau1 = "Porte-Avions";
+        const string bateau2 = "Croiseur";
+        const string bateau3 = "Contre-Torpilleur";
+        const string bateau4 = "Sous-Marin";
+        const string bateau5 = "Torpilleur";
 
         public PositionBateaux()
         {
@@ -37,7 +56,7 @@ namespace BattleShip_Client
             {
                 if (dgv.Rows.Count != 0)
                 {
-                    dgv.Rows.Add("","","","","","","","","","");
+                    dgv.Rows.Add("", "", "", "", "", "", "", "", "", "");
 
                     dgv.Rows[i].HeaderCell.Value = lettre.ToString();
                     lettre = (Char)(Convert.ToUInt16(lettre) + 1);
@@ -56,37 +75,56 @@ namespace BattleShip_Client
         }
         private void DGV_Choix_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            changerCell(e);
-            if (casesRestantes == 0 && RB_PorteAvion.Checked)
+            if (RB_PorteAvion.Checked)
             {
-                RB_PorteAvion.Enabled = false;
-                DGV_Choix.Enabled = false;
-                SetJouerTrue();
+                changerCell(e, "A");
+                if (casesRestantes == 0)
+                {
+                    RB_PorteAvion.Enabled = false;
+                    DGV_Choix.Enabled = false;
+                    SetJouerTrue();
+                }
             }
 
-            if (casesRestantes == 0 && RB_Croiseur.Checked)
+            if (RB_Croiseur.Checked)
             {
-                RB_Croiseur.Enabled = false;
-                DGV_Choix.Enabled = false;
-                SetJouerTrue();
+                changerCell(e, "B");
+                if (casesRestantes == 0 && RB_Croiseur.Checked)
+                {
+                    RB_Croiseur.Enabled = false;
+                    DGV_Choix.Enabled = false;
+                    SetJouerTrue();
+                }
             }
-            if (casesRestantes == 0 && RB_CTorpilleur.Checked)
+            if (RB_CTorpilleur.Checked)
             {
-                RB_CTorpilleur.Enabled = false;
-                DGV_Choix.Enabled = false;
-                SetJouerTrue();
+                changerCell(e, "C");
+                if (casesRestantes == 0)
+                {
+                    RB_CTorpilleur.Enabled = false;
+                    DGV_Choix.Enabled = false;
+                    SetJouerTrue();
+                }
             }
-            if (casesRestantes == 0 && RB_SousMarin.Checked)
+            if (RB_SousMarin.Checked)
             {
-                RB_SousMarin.Enabled = false;
-                DGV_Choix.Enabled = false;
-                SetJouerTrue();
+                changerCell(e, "D");
+                if (casesRestantes == 0)
+                {
+                    RB_SousMarin.Enabled = false;
+                    DGV_Choix.Enabled = false;
+                    SetJouerTrue();
+                }
             }
-            if (casesRestantes == 0 && RB_Torpilleur.Checked)
+            if (RB_Torpilleur.Checked)
             {
-                RB_Torpilleur.Enabled = false;
-                DGV_Choix.Enabled = false;
-                SetJouerTrue();
+                changerCell(e, "E");
+                if (casesRestantes == 0)
+                {
+                    RB_Torpilleur.Enabled = false;
+                    DGV_Choix.Enabled = false;
+                    SetJouerTrue();
+                }
             }
         }
 
@@ -123,14 +161,14 @@ namespace BattleShip_Client
             int rangee = e.RowIndex;
             int colonne = e.ColumnIndex;
             verifierPosibiliteOver(rangee, colonne);
-            switch(direction)
+            switch (direction)
             {
                 case 0: //vers la droite
                     if (droiteEstDisponible)
                     {
-                        if ((colonne + casesRestantes - 1) < 10 && colonne >=0 && rangee >= 0)
+                        if ((colonne + casesRestantes - 1) < 10 && colonne >= 0 && rangee >= 0)
                         {
-                            for(int i = 0; i < (casesRestantes); i++)
+                            for (int i = 0; i < (casesRestantes); i++)
                             {
                                 DGV_Choix.Rows[rangee].Cells[colonne + i].Selected = true;
                             }
@@ -140,7 +178,7 @@ namespace BattleShip_Client
                 case 1:
                     if (basEstDisponible)
                     {
-                        if ((rangee + casesRestantes - 1) < 10 && rangee >=0 && colonne >= 0)
+                        if ((rangee + casesRestantes - 1) < 10 && rangee >= 0 && colonne >= 0)
                         {
                             for (int i = 0; i < (casesRestantes); i++)
                             {
@@ -152,7 +190,7 @@ namespace BattleShip_Client
                 case 2:
                     if (gaucheEstDisponible)
                     {
-                        if ((colonne - (casesRestantes - 1)) >= 0 && rangee >=0 && rangee < 10)
+                        if ((colonne - (casesRestantes - 1)) >= 0 && rangee >= 0 && rangee < 10)
                         {
                             for (int i = 0; i < (casesRestantes); i++)
                             {
@@ -185,7 +223,7 @@ namespace BattleShip_Client
                         }
                     }
                     break;
-            }                
+            }
         }
 
         private void DGV_Choix_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
@@ -211,9 +249,9 @@ namespace BattleShip_Client
             }
         }
 
-        private void changerCell(DataGridViewCellEventArgs e)
+        private void changerCell(DataGridViewCellEventArgs e, string marqueurBateau)
         {
-            if (!DGV_Choix.CurrentCell.Value.Equals("X"))
+            if (!DGV_Choix.CurrentCell.Value.Equals(marqueurBateau))
             {
                 int rangee = e.RowIndex;
                 int colonne = e.ColumnIndex;
@@ -226,7 +264,7 @@ namespace BattleShip_Client
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
-                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = 'X';
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
                                 }
                             }
                         }
@@ -238,7 +276,7 @@ namespace BattleShip_Client
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
-                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Value = 'X';
+                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Value = marqueurBateau;
                                 }
                             }
                         }
@@ -250,7 +288,7 @@ namespace BattleShip_Client
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
-                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Value = 'X';
+                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Value = marqueurBateau;
                                 }
                             }
                         }
@@ -262,7 +300,7 @@ namespace BattleShip_Client
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
-                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Value = 'X';
+                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Value = marqueurBateau;
                                 }
                             }
                         }
@@ -274,7 +312,7 @@ namespace BattleShip_Client
                             {
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
-                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = 'X';
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
                                 }
                             }
                         }
@@ -291,6 +329,12 @@ namespace BattleShip_Client
                 casesRestantes = 0;
             }
         }
+
+        private void BTN_Jouer_Click(object sender, EventArgs e)
+        {
+            Connecter();
+        }
+
         private void SetAllDirectionsTrue()
         {
             basEstDisponible = true;
@@ -302,7 +346,7 @@ namespace BattleShip_Client
         {
             for (int i = 0; i < casesRestantes; i++)
             {
-                if (rangee + i < 10 && rangee >=0 && colonne >= 0)
+                if (rangee + i < 10 && rangee >= 0 && colonne >= 0)
                 {
                     if (!DGV_Choix.Rows[rangee + i].Cells[colonne].Value.Equals("")) // Vers le bas
                         basEstDisponible = false;
@@ -312,7 +356,7 @@ namespace BattleShip_Client
                     if (!DGV_Choix.Rows[rangee - i].Cells[colonne].Value.Equals("")) // Vers le haut
                         hautEstDisponible = false;
                 }
-                if (colonne + i < 10 && colonne >=0 && rangee >= 0)
+                if (colonne + i < 10 && colonne >= 0 && rangee >= 0)
                 {
                     if (!DGV_Choix.Rows[rangee].Cells[colonne + i].Value.Equals("")) // Vers la droite
                         droiteEstDisponible = false;
@@ -348,6 +392,89 @@ namespace BattleShip_Client
                     gaucheEstDisponible = false;
                 }
             }
+        }
+        private void Connecter()
+        {
+            try
+            {
+                // On rempli la flotte avec les informations du DataGridView
+                RemplirFlotte();
+                // On défini le socket
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                // On affecte l'ip et le port au IPEndPoint
+                localEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+                // Connection du joueur au socket
+                socket.Connect(localEndPoint);
+                // On envoie la flotte au serveur
+                EnvoyerFlotte();
+                // On démarre la partie
+                DemarrerPartie();
+
+            }
+            catch (SocketException e)
+            {
+                MessageBox.Show("Erreur de connexion: " + e.Message.ToString(), "Erreur", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                this.Close(); //to turn off current app
+            }
+        }
+        private void EnvoyerFlotte()
+        {
+            // Création du tableau de bytes
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            // On encrypte la flotte
+            using (var stream = new MemoryStream())
+            {
+                // On sérialise la flotte
+                binaryFormatter.Serialize(stream, flotte);
+                // On envoie la flotte
+                socket.Send(stream.ToArray());
+            }
+        }
+        private void DemarrerPartie()
+        {
+            throw new NotImplementedException();
+        }
+        private void RemplirFlotte()
+        {
+            List<Point> positionsA = new List<Point>();
+            List<Point> positionsB = new List<Point>();
+            List<Point> positionsC = new List<Point>();
+            List<Point> positionsD = new List<Point>();
+            List<Point> positionsE = new List<Point>();
+
+            var nombreTotalCases = DGV_Choix.ColumnCount * DGV_Choix.RowCount;
+
+            for (int i = 0; i < DGV_Choix.RowCount; i++)
+            {
+                for (int j = 0; j < DGV_Choix.ColumnCount; j++)
+                {
+                    switch (DGV_Choix.Rows[i].Cells[j].Value.ToString())
+                    {
+                        case "A":
+                            positionsA.Add(new Point(DGV_Choix.Rows[i].Cells[j].RowIndex, DGV_Choix.Rows[i].Cells[j].ColumnIndex));
+                            break;
+                        case "B":
+                            positionsB.Add(new Point(DGV_Choix.Rows[i].Cells[j].RowIndex, DGV_Choix.Rows[i].Cells[j].ColumnIndex));
+                            break;
+                        case "C":
+                            positionsC.Add(new Point(DGV_Choix.Rows[i].Cells[j].RowIndex, DGV_Choix.Rows[i].Cells[j].ColumnIndex));
+                            break;
+                        case "D":
+                            positionsD.Add(new Point(DGV_Choix.Rows[i].Cells[j].RowIndex, DGV_Choix.Rows[i].Cells[j].ColumnIndex));
+                            break;
+                        case "E":
+                            positionsE.Add(new Point(DGV_Choix.Rows[i].Cells[j].RowIndex, DGV_Choix.Rows[i].Cells[j].ColumnIndex));
+                            break;
+                    }
+                }
+            }
+            _bateaux.Add(new Bateau(bateau1, positionsA));
+            _bateaux.Add(new Bateau(bateau2, positionsB));
+            _bateaux.Add(new Bateau(bateau3, positionsC));
+            _bateaux.Add(new Bateau(bateau4, positionsD));
+            _bateaux.Add(new Bateau(bateau5, positionsE));
+            flotte = new Flotte(_bateaux);
         }
     }
 }

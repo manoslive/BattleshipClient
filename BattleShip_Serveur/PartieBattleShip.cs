@@ -175,6 +175,7 @@ namespace BattleShip_Serveur
                 // Recoit la position des bateaux de chaque joueur et l'affecte à une variable globale
                 flotteJ1 = recevoirPositionBateaux(joueur1);
                 flotteJ2 = recevoirPositionBateaux(joueur2);
+                Console.WriteLine("TEST");
 
                 // Envoie de l'ordre de jeu des joueurs ainsi que l'ip de son opposant
                 envoyerReponse("1 " + (joueur2.RemoteEndPoint as IPEndPoint).Address, joueur1);

@@ -438,6 +438,7 @@ namespace BattleShip_Client
         private void DemarrerPartie()
         {
             TableauAttaque partie = new TableauAttaque(DGV_Choix);
+            this.Hide();
             partie.ShowDialog();
             
         }

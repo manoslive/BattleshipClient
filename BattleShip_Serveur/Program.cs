@@ -21,7 +21,7 @@ namespace BattleShip_Serveur
         {
             socketServeur = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socketServeur.Bind(new IPEndPoint(0, 666));
-            socketServeur.Listen(100);
+            socketServeur.Listen(2);
             Console.WriteLine("Serveur en attente...");
 
             while (true)

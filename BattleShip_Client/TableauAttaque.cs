@@ -14,14 +14,10 @@ namespace BattleShip_Client
     {
         public TableauAttaque(DataGridView mesBateaux)
         {
-            DGV_Perso = mesBateaux;
-            // DGV_Perso = CopyDataGridView(mesBateaux);
+            //DGV_Perso = mesBateaux;
             InitializeComponent();
-        }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
+            CopyDataGridView(mesBateaux, DGV_Perso);
         }
 
         private void DGV_Attaque_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -57,41 +53,18 @@ namespace BattleShip_Client
 
         }
 
-        private DataGridView CopyDataGridView(DataGridView dgv_org)
+        private void CopyDataGridView(DataGridView dgv_org, DataGridView dgv_new)
         {
-            DataGridView dgv_copy = new DataGridView();
-            try
+            for (int i = 0; i < dgv_org.RowCount; i++)
             {
-                if (dgv_copy.Columns.Count == 0)
+                DataGridViewRow row = dgv_org.Rows[i];
+                DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
+                for (Int32 index = 0; index < row.Cells.Count; index++)
                 {
-                    foreach (DataGridViewColumn dgvc in dgv_org.Columns)
-                    {
-                        dgv_copy.Columns.Add(dgvc.Clone() as DataGridViewColumn);
-                    }
+                    clonedRow.Cells[index].Value = row.Cells[index].Value;
                 }
-
-                DataGridViewRow row = new DataGridViewRow();
-
-                for (int i = 0; i < dgv_org.Rows.Count; i++)
-                {
-                    row = (DataGridViewRow)dgv_org.Rows[i].Clone();
-                    int intColIndex = 0;
-                    foreach (DataGridViewCell cell in dgv_org.Rows[i].Cells)
-                    {
-                        row.Cells[intColIndex].Value = cell.Value;
-                        intColIndex++;
-                    }
-                    dgv_copy.Rows.Add(row);
-                }
-                dgv_copy.AllowUserToAddRows = false;
-                dgv_copy.Refresh();
-
+                dgv_new.Rows.Add(clonedRow);
             }
-            catch (Exception ex)
-            {
-                
-            }
-            return dgv_copy;
         }
     }
 }

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,11 +15,14 @@ namespace BattleShip_Client
 {
     public partial class TableauAttaque : Form
     {
-        public TableauAttaque(DataGridView mesBateaux)
+        private static Socket socket;
+        public TableauAttaque(Socket org_socket,DataGridView mesBateaux)
         {
             InitializeComponent();
             //Copie ton DGV PositionBateaux au nouveau DGV
             CopyDataGridView(mesBateaux, DGV_Perso);
+            //Retien mon socket de^PositionBateaux
+            socket = org_socket;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -56,6 +62,11 @@ namespace BattleShip_Client
                 }
                 dgv_new.Rows.Add(clonedRow);//Ajoute la rangée cloné dans le nouveau dgv
             }
+        }
+
+        private void BTN_Attaquer_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

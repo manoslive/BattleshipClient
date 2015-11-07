@@ -437,7 +437,7 @@ namespace BattleShip_Client
         }
         private void DemarrerPartie()
         {
-            TableauAttaque partie = new TableauAttaque(DGV_Choix);
+            TableauAttaque partie = new TableauAttaque(socket,DGV_Choix);
             this.Hide();
             partie.ShowDialog();
             

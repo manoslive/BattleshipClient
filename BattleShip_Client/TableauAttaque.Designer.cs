@@ -236,6 +236,7 @@
             this.BTN_Attaquer.TabIndex = 4;
             this.BTN_Attaquer.Text = "Lancer attaque";
             this.BTN_Attaquer.UseVisualStyleBackColor = true;
+            this.BTN_Attaquer.Click += new System.EventHandler(this.BTN_Attaquer_Click);
             // 
             // DGV_Perso
             // 

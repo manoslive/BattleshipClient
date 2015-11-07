@@ -105,7 +105,6 @@
             this.DGV_Attaque.RowTemplate.Height = 24;
             this.DGV_Attaque.Size = new System.Drawing.Size(442, 226);
             this.DGV_Attaque.TabIndex = 0;
-            this.DGV_Attaque.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellContentClick);
             // 
             // Column1
             // 
@@ -264,7 +263,6 @@
             this.DGV_Perso.RowTemplate.Height = 24;
             this.DGV_Perso.Size = new System.Drawing.Size(453, 226);
             this.DGV_Perso.TabIndex = 0;
-            this.DGV_Perso.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellContentClick);
             // 
             // dataGridViewTextBoxColumn1
             // 

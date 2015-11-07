@@ -14,15 +14,9 @@ namespace BattleShip_Client
     {
         public TableauAttaque(DataGridView mesBateaux)
         {
-            //DGV_Perso = mesBateaux;
             InitializeComponent();
-
+            //Copie ton DGV PositionBateaux au nouveau DGV
             CopyDataGridView(mesBateaux, DGV_Perso);
-        }
-
-        private void DGV_Attaque_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -48,22 +42,19 @@ namespace BattleShip_Client
             dgv.AllowUserToAddRows = false;
         }
 
-        private void DGV_Perso_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void CopyDataGridView(DataGridView dgv_org, DataGridView dgv_new)
         {
+            //Pour chaque rangéé du dgv original
             for (int i = 0; i < dgv_org.RowCount; i++)
             {
+                //Clone la rangée 
                 DataGridViewRow row = dgv_org.Rows[i];
                 DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
                 for (Int32 index = 0; index < row.Cells.Count; index++)
                 {
-                    clonedRow.Cells[index].Value = row.Cells[index].Value;
+                    clonedRow.Cells[index].Value = row.Cells[index].Value;//Copie la value de chaque cell
                 }
-                dgv_new.Rows.Add(clonedRow);
+                dgv_new.Rows.Add(clonedRow);//Ajoute la rangée cloné dans le nouveau dgv
             }
         }
     }

@@ -20,7 +20,7 @@ namespace BattleShip_Client
         // Variables
         private int casesRestantes = 0;
         private bool basEstDisponible = true, hautEstDisponible = true, droiteEstDisponible = true, gaucheEstDisponible = true;
-        private int direction = 0;
+        private int direction = 3;
         private static Socket socket;
         DataGridViewCell derniereCellule;
         private IPEndPoint localEndPoint;
@@ -266,6 +266,7 @@ namespace BattleShip_Client
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
                                 }
+                                casesRestantes = 0;
                             }
                         }
                         break;
@@ -278,6 +279,7 @@ namespace BattleShip_Client
                                 {
                                     DGV_Choix.Rows[rangee + i].Cells[colonne].Value = marqueurBateau;
                                 }
+                                casesRestantes = 0;
                             }
                         }
                         break;
@@ -290,6 +292,7 @@ namespace BattleShip_Client
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne - i].Value = marqueurBateau;
                                 }
+                                casesRestantes = 0;
                             }
                         }
                         break;
@@ -302,6 +305,7 @@ namespace BattleShip_Client
                                 {
                                     DGV_Choix.Rows[rangee - i].Cells[colonne].Value = marqueurBateau;
                                 }
+                                casesRestantes = 0;
                             }
                         }
                         break;
@@ -314,6 +318,7 @@ namespace BattleShip_Client
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
                                 }
+                                casesRestantes = 0;
                             }
                         }
                         break;
@@ -326,7 +331,6 @@ namespace BattleShip_Client
                 }
                 TB_CasesRestantes.Text = casesRestantes.ToString();*/
                 //derniereCellule = DGV_Choix.CurrentCell;
-                casesRestantes = 0;
             }
         }
 
@@ -433,7 +437,8 @@ namespace BattleShip_Client
         }
         private void DemarrerPartie()
         {
-            TableauAttaque partie = new TableauAttaque(DGV_Choix);
+            TableauAttaque partie = new TableauAttaque(socket,DGV_Choix);
+            this.Hide();
             partie.ShowDialog();
         }
         private void RemplirFlotte()

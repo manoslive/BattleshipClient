@@ -68,7 +68,6 @@
             this.LB_GrilleAttaque.Size = new System.Drawing.Size(42, 13);
             this.LB_GrilleAttaque.TabIndex = 2;
             this.LB_GrilleAttaque.Text = "Ennemi";
-            this.LB_GrilleAttaque.Click += new System.EventHandler(this.label1_Click);
             // 
             // LB_GrillePerso
             // 
@@ -100,13 +99,12 @@
             this.Column10});
             this.DGV_Attaque.Enabled = false;
             this.DGV_Attaque.Location = new System.Drawing.Point(9, 52);
-            this.DGV_Attaque.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.DGV_Attaque.Margin = new System.Windows.Forms.Padding(2);
             this.DGV_Attaque.Name = "DGV_Attaque";
             this.DGV_Attaque.ReadOnly = true;
             this.DGV_Attaque.RowTemplate.Height = 24;
             this.DGV_Attaque.Size = new System.Drawing.Size(442, 226);
             this.DGV_Attaque.TabIndex = 0;
-            this.DGV_Attaque.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellContentClick);
             // 
             // Column1
             // 
@@ -204,7 +202,7 @@
             "I",
             "J"});
             this.CB_Lettres.Location = new System.Drawing.Point(681, 295);
-            this.CB_Lettres.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CB_Lettres.Margin = new System.Windows.Forms.Padding(2);
             this.CB_Lettres.Name = "CB_Lettres";
             this.CB_Lettres.Size = new System.Drawing.Size(41, 21);
             this.CB_Lettres.TabIndex = 3;
@@ -224,7 +222,7 @@
             "9",
             "10"});
             this.CB_Chiffres.Location = new System.Drawing.Point(733, 295);
-            this.CB_Chiffres.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CB_Chiffres.Margin = new System.Windows.Forms.Padding(2);
             this.CB_Chiffres.Name = "CB_Chiffres";
             this.CB_Chiffres.Size = new System.Drawing.Size(41, 21);
             this.CB_Chiffres.TabIndex = 3;
@@ -232,12 +230,13 @@
             // BTN_Attaquer
             // 
             this.BTN_Attaquer.Location = new System.Drawing.Point(792, 294);
-            this.BTN_Attaquer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.BTN_Attaquer.Margin = new System.Windows.Forms.Padding(2);
             this.BTN_Attaquer.Name = "BTN_Attaquer";
             this.BTN_Attaquer.Size = new System.Drawing.Size(105, 20);
             this.BTN_Attaquer.TabIndex = 4;
             this.BTN_Attaquer.Text = "Lancer attaque";
             this.BTN_Attaquer.UseVisualStyleBackColor = true;
+            this.BTN_Attaquer.Click += new System.EventHandler(this.BTN_Attaquer_Click);
             // 
             // DGV_Perso
             // 
@@ -259,13 +258,12 @@
             this.dataGridViewTextBoxColumn10});
             this.DGV_Perso.Enabled = false;
             this.DGV_Perso.Location = new System.Drawing.Point(454, 52);
-            this.DGV_Perso.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.DGV_Perso.Margin = new System.Windows.Forms.Padding(2);
             this.DGV_Perso.Name = "DGV_Perso";
             this.DGV_Perso.ReadOnly = true;
             this.DGV_Perso.RowTemplate.Height = 24;
-            this.DGV_Perso.Size = new System.Drawing.Size(442, 226);
+            this.DGV_Perso.Size = new System.Drawing.Size(453, 226);
             this.DGV_Perso.TabIndex = 0;
-            this.DGV_Perso.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellContentClick);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -352,7 +350,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(906, 329);
+            this.ClientSize = new System.Drawing.Size(918, 329);
             this.Controls.Add(this.BTN_Attaquer);
             this.Controls.Add(this.CB_Chiffres);
             this.Controls.Add(this.CB_Lettres);
@@ -360,7 +358,7 @@
             this.Controls.Add(this.LB_GrilleAttaque);
             this.Controls.Add(this.DGV_Perso);
             this.Controls.Add(this.DGV_Attaque);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "TableauAttaque";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);

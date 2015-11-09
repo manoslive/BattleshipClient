@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,21 +15,14 @@ namespace BattleShip_Client
 {
     public partial class TableauAttaque : Form
     {
-        public TableauAttaque(DataGridView mesBateaux)
+        private static Socket socket;
+        public TableauAttaque(Socket org_socket,DataGridView mesBateaux)
         {
-            DGV_Perso = mesBateaux;
-            // DGV_Perso = CopyDataGridView(mesBateaux);
             InitializeComponent();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void DGV_Attaque_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            //Copie ton DGV PositionBateaux au nouveau DGV
+            CopyDataGridView(mesBateaux, DGV_Perso);
+            //Retien mon socket de^PositionBateaux
+            socket = org_socket;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -52,46 +48,25 @@ namespace BattleShip_Client
             dgv.AllowUserToAddRows = false;
         }
 
-        private void DGV_Perso_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void CopyDataGridView(DataGridView dgv_org, DataGridView dgv_new)
         {
-
+            //Pour chaque rangéé du dgv original
+            for (int i = 0; i < dgv_org.RowCount; i++)
+            {
+                //Clone la rangée 
+                DataGridViewRow row = dgv_org.Rows[i];
+                DataGridViewRow clonedRow = (DataGridViewRow)row.Clone();
+                for (Int32 index = 0; index < row.Cells.Count; index++)
+                {
+                    clonedRow.Cells[index].Value = row.Cells[index].Value;//Copie la value de chaque cell
+                }
+                dgv_new.Rows.Add(clonedRow);//Ajoute la rangée cloné dans le nouveau dgv
+            }
         }
 
-        private DataGridView CopyDataGridView(DataGridView dgv_org)
+        private void BTN_Attaquer_Click(object sender, EventArgs e)
         {
-            DataGridView dgv_copy = new DataGridView();
-            try
-            {
-                if (dgv_copy.Columns.Count == 0)
-                {
-                    foreach (DataGridViewColumn dgvc in dgv_org.Columns)
-                    {
-                        dgv_copy.Columns.Add(dgvc.Clone() as DataGridViewColumn);
-                    }
-                }
 
-                DataGridViewRow row = new DataGridViewRow();
-
-                for (int i = 0; i < dgv_org.Rows.Count; i++)
-                {
-                    row = (DataGridViewRow)dgv_org.Rows[i].Clone();
-                    int intColIndex = 0;
-                    foreach (DataGridViewCell cell in dgv_org.Rows[i].Cells)
-                    {
-                        row.Cells[intColIndex].Value = cell.Value;
-                        intColIndex++;
-                    }
-                    dgv_copy.Rows.Add(row);
-                }
-                dgv_copy.AllowUserToAddRows = false;
-                dgv_copy.Refresh();
-
-            }
-            catch (Exception ex)
-            {
-                
-            }
-            return dgv_copy;
         }
     }
 }

@@ -435,7 +435,6 @@ namespace BattleShip_Client
         {
             TableauAttaque partie = new TableauAttaque(DGV_Choix);
             partie.ShowDialog();
-            
         }
         private void RemplirFlotte()
         {

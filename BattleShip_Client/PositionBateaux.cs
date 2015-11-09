@@ -372,31 +372,7 @@ namespace BattleShip_Client
                 }
             }
         }
-        private void verifierPosibilite(DataGridViewCell cell)
-        {
-            int rangee = cell.RowIndex;
-            int colonne = cell.ColumnIndex;
-
-            for (int i = 1; i < casesRestantes; i++)
-            {
-                if (!DGV_Choix.Rows[rangee + i].Cells[colonne].Value.Equals("")) // Vers le bas
-                {
-                    basEstDisponible = false;
-                }
-                if (!DGV_Choix.Rows[rangee - i].Cells[colonne].Value.Equals("")) // Vers le haut
-                {
-                    hautEstDisponible = false;
-                }
-                if (!DGV_Choix.Rows[rangee].Cells[colonne + i].Value.Equals("")) // Vers la droite
-                {
-                    droiteEstDisponible = false;
-                }
-                if (!DGV_Choix.Rows[rangee].Cells[colonne - i].Value.Equals("")) // Vers la gauche
-                {
-                    gaucheEstDisponible = false;
-                }
-            }
-        }
+      
         private void Connecter()
         {
             try
@@ -409,6 +385,8 @@ namespace BattleShip_Client
                 localEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
                 // Connection du joueur au socket
                 socket.Connect(localEndPoint);
+                // Attendre la connection du prochain cjoueur
+                AttendreProchainJoueur();
                 // On envoie la flotte au serveur
                 EnvoyerFlotte();
                 // On démarre la partie
@@ -421,6 +399,21 @@ namespace BattleShip_Client
                 System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
                 this.Close(); //to turn off current app
             }
+        }
+        private void AttendreProchainJoueur()
+        {
+            MessageBox.Show("En attente de votre adversaire");
+            byte[] buffer = new byte[200];
+            int byteLecture = socket.Receive(buffer);
+            byte[] byteFormatter = new byte[byteLecture];
+            for (int i = 0; i < byteLecture; ++i)
+            {
+                byteFormatter[i] = buffer[i];
+            }
+
+            string connectionJoueur = Encoding.ASCII.GetString(byteFormatter);
+
+            MessageBox.Show(connectionJoueur);
         }
         private void EnvoyerFlotte()
         {

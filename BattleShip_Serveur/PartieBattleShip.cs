@@ -55,14 +55,14 @@ namespace BattleShip_Serveur
             byte[] dataJ2;
 
             // Si le joueur1 a gagné on envoie les réponses correspondante
-            if(flotteJ1.FlotteEstVivante())
+            if(flotteJ1.FlotteEstVivante() && !flotteJ2.FlotteEstVivante())
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 1");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 0");
             }
 
             // Si le joueur2 a gagné on envoie les réponses correspondante
-            if(flotteJ2.FlotteEstVivante())
+            else if(flotteJ2.FlotteEstVivante() && !flotteJ1.FlotteEstVivante())
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 0");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 1");
@@ -108,7 +108,7 @@ namespace BattleShip_Serveur
                             {
                                 bateauToucher = !bateauToucher;
                                 // Le format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque + " " + le nom du bateau coulé
-                                return bateauToucher.ToString() + " " + attaque + " " + listeBateau[i]._nom;
+                                return bateauToucher.ToString() + " " + tabAttaque[0] + " " + tabAttaque[1] + " " + listeBateau[i]._nom;
                             }
                         }
                     }
@@ -116,7 +116,7 @@ namespace BattleShip_Serveur
                 }
             }
             // Format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque
-            return bateauToucher.ToString() + " " + attaque;
+            return bateauToucher.ToString() + " " + tabAttaque[0] + " " + tabAttaque[1];
         }
 
         /// <summary>
@@ -172,6 +172,9 @@ namespace BattleShip_Serveur
         {
             try
             {
+                // Envoie au 2 joueurs que les 2 sont connectés pour pouvoir poursuivre avec le jeux
+                envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur1);
+                envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur2);
                 // Recoit la position des bateaux de chaque joueur et l'affecte à une variable globale
                 flotteJ1 = recevoirPositionBateaux(joueur1);
                 flotteJ2 = recevoirPositionBateaux(joueur2);

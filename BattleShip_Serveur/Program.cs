@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -42,7 +43,6 @@ namespace BattleShip_Serveur
                     new PartieBattleShip(socketJ1, socketJ2).thread.Start();
 
                     Console.WriteLine("Partie démarre entre : " + (socketJ1.RemoteEndPoint as IPEndPoint).Address + " et " + (socketJ2.RemoteEndPoint as IPEndPoint).Address);
-
                     socketJ1 = null;
                     socketJ2 = null;
                 }

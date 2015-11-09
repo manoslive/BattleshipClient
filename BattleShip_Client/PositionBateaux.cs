@@ -433,7 +433,6 @@ namespace BattleShip_Client
             TableauAttaque partie = new TableauAttaque(socket,DGV_Choix);
             this.Hide();
             partie.ShowDialog();
-            
         }
         private void RemplirFlotte()
         {

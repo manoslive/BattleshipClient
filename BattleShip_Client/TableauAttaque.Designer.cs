@@ -201,7 +201,7 @@
             "H",
             "I",
             "J"});
-            this.CB_Lettres.Location = new System.Drawing.Point(681, 295);
+            this.CB_Lettres.Location = new System.Drawing.Point(722, 297);
             this.CB_Lettres.Margin = new System.Windows.Forms.Padding(2);
             this.CB_Lettres.Name = "CB_Lettres";
             this.CB_Lettres.Size = new System.Drawing.Size(41, 21);
@@ -221,7 +221,7 @@
             "8",
             "9",
             "10"});
-            this.CB_Chiffres.Location = new System.Drawing.Point(733, 295);
+            this.CB_Chiffres.Location = new System.Drawing.Point(668, 297);
             this.CB_Chiffres.Margin = new System.Windows.Forms.Padding(2);
             this.CB_Chiffres.Name = "CB_Chiffres";
             this.CB_Chiffres.Size = new System.Drawing.Size(41, 21);

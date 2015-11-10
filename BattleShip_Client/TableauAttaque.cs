@@ -35,15 +35,15 @@ namespace BattleShip_Client
         }
         private void RendreToutVisible(bool b)
         {
+            LB_Demarrer.Visible = !b;
+            BTN_Demarrer.Visible = !b;
+
             DGV_Attaque.Visible = b;
             DGV_Perso.Visible = b;
             label1.Visible = b;
             LB_GrilleAttaque.Visible = b;
             LB_GrillePerso.Visible = b;
             BTN_Attaquer.Visible = b;
-
-            LB_Demarrer.Visible = !b;
-            BTN_Demarrer.Visible = !b;
         }
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
@@ -107,10 +107,17 @@ namespace BattleShip_Client
                 }
                 dgv_new.Rows.Add(clonedRow);//Ajoute la rangée cloné dans le nouveau dgv
             }
+            DGV_Perso.ClearSelection();
         }
         //Reçoit le résultat de son coup
         private void RecevoirReponse()
         {
+            DataGridViewCellStyle toucheStyle = new DataGridViewCellStyle();
+            toucheStyle.BackColor = Color.Red;
+            toucheStyle.ForeColor = Color.Red;
+            DataGridViewCellStyle manqueStyle = new DataGridViewCellStyle();
+            manqueStyle.BackColor = Color.Blue;
+            manqueStyle.ForeColor = Color.Blue;
             DialogResult dialogResult;
             string reponse;
             byte[] buffer = new byte[socket.SendBufferSize];
@@ -130,12 +137,12 @@ namespace BattleShip_Client
                 if (_monTour)
                 {
                     MessageBox.Show("Touché!");
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "X";
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                 }
                 else
                 {
                     MessageBox.Show("Touché");
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "X";
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                 }
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
@@ -167,12 +174,12 @@ namespace BattleShip_Client
                 if (_monTour)
                 {
                     MessageBox.Show("Manqué");
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "O";
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                 }
                 else
                 {
                     MessageBox.Show("Manqué!");
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "O";
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                 }
             }
             BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
@@ -201,6 +208,8 @@ namespace BattleShip_Client
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)
         {
+            DGV_Attaque.ClearSelection();
+            DGV_Perso.ClearSelection();
             if (_cibleSelectionnee)
             {
                 EnvoyerAttaque();

@@ -87,8 +87,11 @@ namespace BattleShip_Serveur
         /// <returns></returns>
         private string analyserAttaque(string attaque, List<Bateau> listeBateau)
         {
-            string[] tabAttaque = attaque.Split(' ');
-            Point coordonnee = new Point(Int32.Parse(tabAttaque[0]), Int32.Parse(tabAttaque[1]));
+            string[] tabAttaque = attaque.Split(' '); //chiffre lettre (Y,X)
+            //change la lettre en numero pour la coordonné
+            char X = (char)tabAttaque[1][0];
+            int intX = X - 64; // -(la position de A en ascci)
+            Point coordonnee = new Point(X+1,Int32.Parse(tabAttaque[0]) );
             bool bateauToucher = false;
             for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
             {
@@ -116,7 +119,7 @@ namespace BattleShip_Serveur
                 }
             }
             // Format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque
-            return bateauToucher.ToString() + " " + tabAttaque[0] + " " + tabAttaque[1];
+            return bateauToucher.ToString() + " " + tabAttaque[0] + " " + intX;
         }
 
         /// <summary>
@@ -196,7 +199,10 @@ namespace BattleShip_Serveur
                 joueur1.Close();
                 joueur2.Close();
             }
-            catch (Exception e) { }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

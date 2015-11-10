@@ -22,7 +22,6 @@ namespace BattleShip_Client
         private bool basEstDisponible = true, hautEstDisponible = true, droiteEstDisponible = true, gaucheEstDisponible = true;
         private int direction = 3;
         private static Socket socket;
-        DataGridViewCell derniereCellule;
         private IPEndPoint localEndPoint;
         private const string ip = "127.0.0.1";
         private const int port = 666;
@@ -405,7 +404,7 @@ namespace BattleShip_Client
 
             string connectionJoueur = Encoding.ASCII.GetString(byteFormatter);
 
-            MessageBox.Show(connectionsJoueur);
+            MessageBox.Show(connectionJoueur);
         }
         private void EnvoyerFlotte()
         {

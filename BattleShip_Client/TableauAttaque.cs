@@ -116,26 +116,31 @@ namespace BattleShip_Client
                     {
                         if (tabreponse[4] == "1")
                             MessageBox.Show("Vous avez gagné!");
-                            DialogResult dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                //do something
-                            }
-                            else if (dialogResult == DialogResult.No)
-                            {
-                                //do something else
-                            }
+                        DialogResult dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            //do something
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            //do something else
+                        }
                         else
                             MessageBox.Show("Vous avez perdu :-(");
                     }
                 }
                 else
+                {
                     MessageBox.Show("Touché!");
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
+                }
             }
             else
             {
                 MessageBox.Show("Manqué :-(");
+                DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
             }
+            BTN_Attaquer.Enabled = false;
             MessageBox.Show(tabreponse[1]+ tabreponse[2]); //test 
         }
 

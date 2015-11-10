@@ -250,6 +250,9 @@ namespace BattleShip_Client
 
         private void changerCell(DataGridViewCellEventArgs e, string marqueurBateau)
         {
+            DataGridViewCellStyle styleBateau = new DataGridViewCellStyle();
+            styleBateau.BackColor = Color.Green;
+            styleBateau.ForeColor = Color.Green;
             if (!DGV_Choix.CurrentCell.Value.Equals(marqueurBateau))
             {
                 int rangee = e.RowIndex;
@@ -264,6 +267,7 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style = styleBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -277,6 +281,7 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee + i].Cells[colonne].Value = marqueurBateau;
+                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Style = styleBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -290,6 +295,7 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne - i].Value = marqueurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Style = styleBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -303,6 +309,7 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee - i].Cells[colonne].Value = marqueurBateau;
+                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Style = styleBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -316,6 +323,7 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style = styleBateau;
                                 }
                                 casesRestantes = 0;
                             }

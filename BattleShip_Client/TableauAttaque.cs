@@ -44,6 +44,9 @@ namespace BattleShip_Client
             LB_GrilleAttaque.Visible = b;
             LB_GrillePerso.Visible = b;
             BTN_Attaquer.Visible = b;
+
+            DGV_Attaque.ClearSelection();
+            DGV_Perso.ClearSelection();
         }
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()

@@ -393,6 +393,7 @@ namespace BattleShip_Client
         }
         private void AttendreProchainJoueur()
         {
+            Cursor.Current = Cursors.WaitCursor;
             MessageBox.Show("En attente de votre adversaire");
             byte[] buffer = new byte[200];
             int byteLecture = socket.Receive(buffer);
@@ -403,7 +404,7 @@ namespace BattleShip_Client
             }
 
             string connectionJoueur = Encoding.ASCII.GetString(byteFormatter);
-
+            Cursor.Current = Cursors.Default;
             MessageBox.Show(connectionJoueur);
         }
         private void EnvoyerFlotte()

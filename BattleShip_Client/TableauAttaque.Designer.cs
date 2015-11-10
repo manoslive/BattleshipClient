@@ -41,8 +41,6 @@
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CB_Lettres = new System.Windows.Forms.ComboBox();
-            this.CB_Chiffres = new System.Windows.Forms.ComboBox();
             this.BTN_Attaquer = new System.Windows.Forms.Button();
             this.DGV_Perso = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,6 +53,7 @@
             this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).BeginInit();
             this.SuspendLayout();
@@ -97,14 +96,16 @@
             this.Column8,
             this.Column9,
             this.Column10});
-            this.DGV_Attaque.Enabled = false;
             this.DGV_Attaque.Location = new System.Drawing.Point(9, 52);
             this.DGV_Attaque.Margin = new System.Windows.Forms.Padding(2);
+            this.DGV_Attaque.MultiSelect = false;
             this.DGV_Attaque.Name = "DGV_Attaque";
-            this.DGV_Attaque.ReadOnly = true;
             this.DGV_Attaque.RowTemplate.Height = 24;
             this.DGV_Attaque.Size = new System.Drawing.Size(442, 226);
             this.DGV_Attaque.TabIndex = 0;
+            this.DGV_Attaque.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DGV_Attaque_CellMouseClick);
+            this.DGV_Attaque.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellMouseEnter);
+            this.DGV_Attaque.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DGV_Attaque_CellMouseLeave);
             // 
             // Column1
             // 
@@ -187,49 +188,9 @@
             this.Column10.ReadOnly = true;
             this.Column10.Width = 44;
             // 
-            // CB_Lettres
-            // 
-            this.CB_Lettres.FormattingEnabled = true;
-            this.CB_Lettres.Items.AddRange(new object[] {
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J"});
-            this.CB_Lettres.Location = new System.Drawing.Point(722, 297);
-            this.CB_Lettres.Margin = new System.Windows.Forms.Padding(2);
-            this.CB_Lettres.Name = "CB_Lettres";
-            this.CB_Lettres.Size = new System.Drawing.Size(41, 21);
-            this.CB_Lettres.TabIndex = 3;
-            // 
-            // CB_Chiffres
-            // 
-            this.CB_Chiffres.FormattingEnabled = true;
-            this.CB_Chiffres.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"});
-            this.CB_Chiffres.Location = new System.Drawing.Point(668, 297);
-            this.CB_Chiffres.Margin = new System.Windows.Forms.Padding(2);
-            this.CB_Chiffres.Name = "CB_Chiffres";
-            this.CB_Chiffres.Size = new System.Drawing.Size(41, 21);
-            this.CB_Chiffres.TabIndex = 3;
-            // 
             // BTN_Attaquer
             // 
-            this.BTN_Attaquer.Location = new System.Drawing.Point(792, 294);
+            this.BTN_Attaquer.Location = new System.Drawing.Point(346, 282);
             this.BTN_Attaquer.Margin = new System.Windows.Forms.Padding(2);
             this.BTN_Attaquer.Name = "BTN_Attaquer";
             this.BTN_Attaquer.Size = new System.Drawing.Size(105, 20);
@@ -346,14 +307,22 @@
             this.dataGridViewTextBoxColumn10.ReadOnly = true;
             this.dataGridViewTextBoxColumn10.Width = 44;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 286);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(263, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "*Cliquez sur une case pour pouvoir lancer une attaque";
+            // 
             // TableauAttaque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 329);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.BTN_Attaquer);
-            this.Controls.Add(this.CB_Chiffres);
-            this.Controls.Add(this.CB_Lettres);
             this.Controls.Add(this.LB_GrillePerso);
             this.Controls.Add(this.LB_GrilleAttaque);
             this.Controls.Add(this.DGV_Perso);
@@ -373,8 +342,6 @@
         private System.Windows.Forms.Label LB_GrilleAttaque;
         private System.Windows.Forms.Label LB_GrillePerso;
         private System.Windows.Forms.DataGridView DGV_Attaque;
-        private System.Windows.Forms.ComboBox CB_Lettres;
-        private System.Windows.Forms.ComboBox CB_Chiffres;
         private System.Windows.Forms.Button BTN_Attaquer;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
@@ -397,6 +364,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -89,9 +89,11 @@ namespace BattleShip_Serveur
         {
             string[] tabAttaque = attaque.Split(' '); //chiffre lettre (X,Y)
             //change la lettre en numero pour la coordonné
-            char Y = (char)tabAttaque[1][0];
-            int intY = Y - 64; // -(la position de A en ascci)
-            Point coordonnee = new Point(intY-1 , Int32.Parse(tabAttaque[0])-1); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
+            //char Y = (char)tabAttaque[1][0];
+            //int intY = Y - 64; // -(la position de A en ascci)
+            //Point coordonnee = new Point(intY-1 , Int32.Parse(tabAttaque[0])-1); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
+
+            Point coordonnee = new Point(Int32.Parse(tabAttaque[1]), Int32.Parse(tabAttaque[0])); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
             bool bateauToucher = false;
             for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
             {
@@ -119,7 +121,7 @@ namespace BattleShip_Serveur
                 }
             }
             // Format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque
-            return bateauToucher.ToString() + " " + tabAttaque[0] + " " + intY;
+            return bateauToucher.ToString() + " " + tabAttaque[0] + " " + tabAttaque[1];
         }
 
         /// <summary>

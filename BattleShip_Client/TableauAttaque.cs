@@ -16,7 +16,8 @@ namespace BattleShip_Client
     public partial class TableauAttaque : Form
     {
         private static Socket socket;
-        private bool monTour = false;
+        private bool _monTour = false;
+        private bool _cibleSelectionnee = false;
         public TableauAttaque(Socket org_socket, DataGridView mesBateaux)
         {
             InitializeComponent();
@@ -51,13 +52,13 @@ namespace BattleShip_Client
             {
                 MessageBox.Show("Vous êtes premier et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = true;
-                monTour = true;
+                _monTour = true;
             }
             else
             {
                 MessageBox.Show("Vous êtes deuxième et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = false;
-                monTour = false;
+                _monTour = false;
                 RecevoirReponse();
             }
         }
@@ -113,15 +114,15 @@ namespace BattleShip_Client
             //Si le coup touche un bateau
             if(tabreponse[0] == "True")
             {
-                if (monTour)
+                if (_monTour)
                 {
                     MessageBox.Show("Touché!");
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "X";
                 }
                 else
                 {
                     MessageBox.Show("Touché");
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "X";
                 }
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
@@ -137,7 +138,7 @@ namespace BattleShip_Client
                         }
                         else if (dialogResult == DialogResult.No)
                         {
-                            //do something else
+                            Close();
                         }
                         else
                             MessageBox.Show("Vous avez perdu :-(");
@@ -146,19 +147,19 @@ namespace BattleShip_Client
             }
             else
             {
-                if (monTour)
+                if (_monTour)
                 {
                     MessageBox.Show("Manqué");
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "O";
                 }
                 else
                 {
                     MessageBox.Show("Manqué!");
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Value = "O";
                 }
             }
             BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
-            monTour = !monTour;
+            _monTour = !_monTour;
             DGV_Attaque.Refresh();
             if (BTN_Attaquer.Enabled == false)
                 RecevoirReponse();
@@ -166,9 +167,11 @@ namespace BattleShip_Client
 
         private void EnvoyerAttaque()
         {
-            string X = "", Y = "";
-            X = CB_Chiffres.GetItemText(CB_Chiffres.SelectedItem);
-            Y = CB_Lettres.GetItemText(CB_Lettres.SelectedItem);
+            int X = 0, Y = 0;
+            //X = CB_Chiffres.GetItemText(CB_Chiffres.SelectedItem);
+            //Y = CB_Lettres.GetItemText(CB_Lettres.SelectedItem);
+            X = DGV_Attaque.CurrentCell.ColumnIndex;
+            Y = DGV_Attaque.CurrentCell.RowIndex;
             string coordonnees = X + " " + Y;
             byte[] data = Encoding.ASCII.GetBytes(coordonnees);
             socket.Send(data);
@@ -177,7 +180,39 @@ namespace BattleShip_Client
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)
         {
-            EnvoyerAttaque();
+            if (_cibleSelectionnee)
+            {
+                EnvoyerAttaque();
+                _cibleSelectionnee = false;
+            }
+        }
+
+        private void DGV_Attaque_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!_cibleSelectionnee)
+            {
+                if(e.ColumnIndex >= 0 && e.RowIndex >= 0)
+                    DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+            }
+        }
+
+        private void DGV_Attaque_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!_cibleSelectionnee)
+            {
+                if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+                    DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = false;
+            }
+        }
+
+        private void DGV_Attaque_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (_monTour)
+            {
+                _cibleSelectionnee = true;
+                DGV_Attaque.ClearSelection();
+                DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+            }
         }
     }
 }

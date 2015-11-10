@@ -168,8 +168,6 @@ namespace BattleShip_Client
         private void EnvoyerAttaque()
         {
             int X = 0, Y = 0;
-            //X = CB_Chiffres.GetItemText(CB_Chiffres.SelectedItem);
-            //Y = CB_Lettres.GetItemText(CB_Lettres.SelectedItem);
             X = DGV_Attaque.CurrentCell.ColumnIndex;
             Y = DGV_Attaque.CurrentCell.RowIndex;
             string coordonnees = X + " " + Y;

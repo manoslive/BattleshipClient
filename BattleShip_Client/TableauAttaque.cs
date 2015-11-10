@@ -16,6 +16,7 @@ namespace BattleShip_Client
     public partial class TableauAttaque : Form
     {
         private static Socket socket;
+        private bool monTour = false;
         public TableauAttaque(Socket org_socket, DataGridView mesBateaux)
         {
             InitializeComponent();
@@ -50,11 +51,13 @@ namespace BattleShip_Client
             {
                 MessageBox.Show("Vous êtes premier et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = true;
+                monTour = true;
             }
             else
             {
                 MessageBox.Show("Vous êtes deuxième et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = false;
+                monTour = false;
                 RecevoirReponse();
             }
         }
@@ -110,6 +113,16 @@ namespace BattleShip_Client
             //Si le coup touche un bateau
             if(tabreponse[0] == "True")
             {
+                if (monTour)
+                {
+                    MessageBox.Show("Touché!");
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
+                }
+                else
+                {
+                    MessageBox.Show("Touché");
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
+                }
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
                     MessageBox.Show(tabreponse[3] + " coulé!");
@@ -130,22 +143,25 @@ namespace BattleShip_Client
                             MessageBox.Show("Vous avez perdu :-(");
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Touché!");
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "X";
-                }
             }
             else
             {
-                MessageBox.Show("Manqué :-(");
-                DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
+                if (monTour)
+                {
+                    MessageBox.Show("Manqué");
+                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
+                }
+                else
+                {
+                    MessageBox.Show("Manqué!");
+                    DGV_Perso.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
+                }
             }
             BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
+            monTour = !monTour;
             DGV_Attaque.Refresh();
             if (BTN_Attaquer.Enabled == false)
                 RecevoirReponse();
-            //MessageBox.Show(tabreponse[1]+ tabreponse[2]); //test 
         }
 
         private void EnvoyerAttaque()

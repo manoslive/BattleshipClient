@@ -30,9 +30,21 @@ namespace BattleShip_Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            RendreToutVisible(false);
             remplirDgv(DGV_Attaque);
         }
+        private void RendreToutVisible(bool b)
+        {
+            DGV_Attaque.Visible = b;
+            DGV_Perso.Visible = b;
+            label1.Visible = b;
+            LB_GrilleAttaque.Visible = b;
+            LB_GrillePerso.Visible = b;
+            BTN_Attaquer.Visible = b;
 
+            LB_Demarrer.Visible = !b;
+            BTN_Demarrer.Visible = !b;
+        }
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
         {
@@ -51,13 +63,13 @@ namespace BattleShip_Client
            
             if (tabreponse[0] == "1")
             {
-                MessageBox.Show("Vous êtes premier et votre adversaire est:" + tabreponse[1].ToString());
+                LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = true;
                 _monTour = true;
             }
             else
             {
-                MessageBox.Show("Vous êtes deuxième et votre adversaire est:" + tabreponse[1].ToString());
+                LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = false;
                 _monTour = false;
             }
@@ -136,12 +148,13 @@ namespace BattleShip_Client
                             dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
-                            envoyerMessageNouvellePartie();
+                            envoyerMessageNouvellePartie("NouvellePartie");
                             System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
                             Dispose(); //to turn off current app
                         }
                         else if (dialogResult == DialogResult.No)
                         {
+                            envoyerMessageNouvellePartie("Non");
                             Dispose();
                         }
                         else
@@ -169,9 +182,9 @@ namespace BattleShip_Client
                 RecevoirReponse();
         }
 
-        private void envoyerMessageNouvellePartie()
+        private void envoyerMessageNouvellePartie(string reponse)
         {
-            byte[] data = Encoding.ASCII.GetBytes("NouvellePartie");
+            byte[] data = Encoding.ASCII.GetBytes(reponse);
             socket.Send(data);
         }
 
@@ -224,6 +237,13 @@ namespace BattleShip_Client
                     DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
                 }
             }
+        }
+
+        private void BTN_Demarrer_Click(object sender, EventArgs e)
+        {
+            RendreToutVisible(true);
+            if (!_monTour)
+                RecevoirReponse();
         }
     }
 }

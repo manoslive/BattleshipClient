@@ -54,6 +54,8 @@
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
+            this.BTN_Demarrer = new System.Windows.Forms.Button();
+            this.LB_Demarrer = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).BeginInit();
             this.SuspendLayout();
@@ -316,11 +318,33 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "*Cliquez sur une case pour pouvoir lancer une attaque";
             // 
+            // BTN_Demarrer
+            // 
+            this.BTN_Demarrer.Location = new System.Drawing.Point(414, 156);
+            this.BTN_Demarrer.Name = "BTN_Demarrer";
+            this.BTN_Demarrer.Size = new System.Drawing.Size(75, 39);
+            this.BTN_Demarrer.TabIndex = 6;
+            this.BTN_Demarrer.Text = "Démarrer la partie";
+            this.BTN_Demarrer.UseVisualStyleBackColor = true;
+            this.BTN_Demarrer.Click += new System.EventHandler(this.BTN_Demarrer_Click);
+            // 
+            // LB_Demarrer
+            // 
+            this.LB_Demarrer.AutoSize = true;
+            this.LB_Demarrer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LB_Demarrer.Location = new System.Drawing.Point(302, 121);
+            this.LB_Demarrer.Name = "LB_Demarrer";
+            this.LB_Demarrer.Size = new System.Drawing.Size(292, 19);
+            this.LB_Demarrer.TabIndex = 7;
+            this.LB_Demarrer.Text = "\"Vous êtes premier et votre adversaire est:\"";
+            // 
             // TableauAttaque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 329);
+            this.Controls.Add(this.LB_Demarrer);
+            this.Controls.Add(this.BTN_Demarrer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.BTN_Attaquer);
             this.Controls.Add(this.LB_GrillePerso);
@@ -365,6 +389,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button BTN_Demarrer;
+        private System.Windows.Forms.Label LB_Demarrer;
     }
 }
 

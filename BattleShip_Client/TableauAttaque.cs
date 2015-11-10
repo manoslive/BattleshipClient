@@ -30,7 +30,7 @@ namespace BattleShip_Client
             remplirDgv(DGV_Attaque);
             RecevoirOrdre();
         }
-
+        // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
         {
             string reponse;
@@ -45,7 +45,7 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-
+           
             if (tabreponse[0] == "1")
             {
                 MessageBox.Show("Vous êtes premier et votre adversaire est:" + tabreponse[1].ToString());
@@ -91,7 +91,7 @@ namespace BattleShip_Client
                 dgv_new.Rows.Add(clonedRow);//Ajoute la rangée cloné dans le nouveau dgv
             }
         }
-
+        //Reçoit le résultat de son coup
         private void RecevoirReponse()
         {
             string reponse;
@@ -106,16 +106,28 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-
+            //Si le coup touche un bateau
             if(tabreponse[0] == "true")
             {
-                if (tabreponse.Length > 3)
+                if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
                     MessageBox.Show(tabreponse[3] + " coulé!");
-                    if (tabreponse[5] == "1")
-                        MessageBox.Show("Vous avez gagné!");
-                    else
-                        MessageBox.Show("Vous avez perdu :-(");
+                    if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
+                    {
+                        if (tabreponse[4] == "1")
+                            MessageBox.Show("Vous avez gagné!");
+                            DialogResult dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                //do something
+                            }
+                            else if (dialogResult == DialogResult.No)
+                            {
+                                //do something else
+                            }
+                        else
+                            MessageBox.Show("Vous avez perdu :-(");
+                    }
                 }
                 else
                     MessageBox.Show("Touché!");
@@ -124,7 +136,7 @@ namespace BattleShip_Client
             {
                 MessageBox.Show("Manqué :-(");
             }
-            MessageBox.Show(tabreponse[1]+ tabreponse[2]);
+            MessageBox.Show(tabreponse[1]+ tabreponse[2]); //test 
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)

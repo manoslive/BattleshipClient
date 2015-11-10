@@ -323,14 +323,6 @@ namespace BattleShip_Client
                         }
                         break;
                 }
-                //DGV_Choix.CurrentCell.Value = "X";
-                /*for(int i=0; i< DGV_Choix.SelectedCells.Count; i++)
-                {
-                    DGV_Choix.SelectedCells[i].Value = "X";
-                    casesRestantes--;
-                }
-                TB_CasesRestantes.Text = casesRestantes.ToString();*/
-                //derniereCellule = DGV_Choix.CurrentCell;
             }
         }
 
@@ -413,7 +405,7 @@ namespace BattleShip_Client
 
             string connectionJoueur = Encoding.ASCII.GetString(byteFormatter);
 
-            MessageBox.Show(connectionJoueur);
+            MessageBox.Show(connectionsJoueur);
         }
         private void EnvoyerFlotte()
         {

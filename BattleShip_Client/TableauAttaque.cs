@@ -55,6 +55,7 @@ namespace BattleShip_Client
             {
                 MessageBox.Show("Vous êtes deuxième et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = false;
+                RecevoirReponse();
             }
         }
 
@@ -107,7 +108,7 @@ namespace BattleShip_Client
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
             //Si le coup touche un bateau
-            if(tabreponse[0] == "true")
+            if(tabreponse[0] == "True")
             {
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
@@ -140,11 +141,14 @@ namespace BattleShip_Client
                 MessageBox.Show("Manqué :-(");
                 DGV_Attaque.Rows[Int32.Parse(tabreponse[2]) - 1].Cells[Int32.Parse(tabreponse[1]) - 1].Value = "O";
             }
-            BTN_Attaquer.Enabled = false;
-            MessageBox.Show(tabreponse[1]+ tabreponse[2]); //test 
+            BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
+            DGV_Attaque.Refresh();
+            if (BTN_Attaquer.Enabled == false)
+                RecevoirReponse();
+            //MessageBox.Show(tabreponse[1]+ tabreponse[2]); //test 
         }
 
-        private void BTN_Attaquer_Click(object sender, EventArgs e)
+        private void EnvoyerAttaque()
         {
             string X = "", Y = "";
             X = CB_Chiffres.GetItemText(CB_Chiffres.SelectedItem);
@@ -153,6 +157,11 @@ namespace BattleShip_Client
             byte[] data = Encoding.ASCII.GetBytes(coordonnees);
             socket.Send(data);
             RecevoirReponse();
+        }
+
+        private void BTN_Attaquer_Click(object sender, EventArgs e)
+        {
+            EnvoyerAttaque();
         }
     }
 }

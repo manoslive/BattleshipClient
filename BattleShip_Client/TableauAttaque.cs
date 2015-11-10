@@ -209,9 +209,12 @@ namespace BattleShip_Client
         {
             if (_monTour)
             {
-                _cibleSelectionnee = true;
-                DGV_Attaque.ClearSelection();
-                DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+                {
+                    _cibleSelectionnee = true;
+                    DGV_Attaque.ClearSelection();
+                    DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                }
             }
         }
     }

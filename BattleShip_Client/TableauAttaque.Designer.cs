@@ -354,6 +354,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "TableauAttaque";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TableauAttaque_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).EndInit();

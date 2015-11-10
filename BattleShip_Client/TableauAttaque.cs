@@ -18,6 +18,7 @@ namespace BattleShip_Client
         private static Socket socket;
         private bool _monTour = false;
         private bool _cibleSelectionnee = false;
+        Color orgStyle;
         public TableauAttaque(Socket org_socket, DataGridView mesBateaux)
         {
             InitializeComponent();
@@ -47,6 +48,8 @@ namespace BattleShip_Client
 
             DGV_Attaque.ClearSelection();
             DGV_Perso.ClearSelection();
+            
+            orgStyle = DGV_Perso.Rows[0].Cells[0].Style.BackColor;
         }
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
@@ -224,8 +227,11 @@ namespace BattleShip_Client
         {
             if (!_cibleSelectionnee)
             {
-                if(e.ColumnIndex >= 0 && e.RowIndex >= 0)
-                    DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
+                {
+                    if(DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor == orgStyle)
+                        DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                }
             }
         }
 
@@ -244,9 +250,12 @@ namespace BattleShip_Client
             {
                 if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
                 {
-                    _cibleSelectionnee = true;
-                    DGV_Attaque.ClearSelection();
-                    DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                    if (DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor == orgStyle)
+                    {
+                        _cibleSelectionnee = true;
+                        DGV_Attaque.ClearSelection();
+                        DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                    }
                 }
             }
         }
@@ -256,6 +265,11 @@ namespace BattleShip_Client
             RendreToutVisible(true);
             if (!_monTour)
                 RecevoirReponse();
+        }
+
+        private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Dispose();
         }
     }
 }

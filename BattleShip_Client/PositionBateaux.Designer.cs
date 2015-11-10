@@ -324,6 +324,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PositionBateaux";
             this.Text = "PositionBateaux";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PositionBateaux_FormClosing);
             this.Load += new System.EventHandler(this.PositionBateaux_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PositionBateaux_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Choix)).EndInit();

@@ -44,7 +44,8 @@ namespace BattleShip_Client
         private void PositionBateaux_Load(object sender, EventArgs e)
         {
             remplirDgv(DGV_Choix);
-           // BTN_Jouer.Enabled = false;
+            DGV_Choix.ClearSelection();
+            // BTN_Jouer.Enabled = false;
         }
         private void remplirDgv(DataGridView dgv)
         {
@@ -415,6 +416,12 @@ namespace BattleShip_Client
             Cursor.Current = Cursors.Default;
             MessageBox.Show(connectionJoueur);
         }
+
+        private void PositionBateaux_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Dispose();
+        }
+
         private void EnvoyerFlotte()
         {
             // Création du tableau de bytes

@@ -20,6 +20,7 @@ namespace BattleShip_Serveur
         Socket joueur2;
         Flotte flotteJ1 = null;
         Flotte flotteJ2 = null;
+        bool _nouvellePartie = true;
 
         /// <summary>
         ///  Constructeur paramétrique
@@ -88,11 +89,6 @@ namespace BattleShip_Serveur
         private string analyserAttaque(string attaque, List<Bateau> listeBateau)
         {
             string[] tabAttaque = attaque.Split(' '); //chiffre lettre (X,Y)
-            //change la lettre en numero pour la coordonné
-            //char Y = (char)tabAttaque[1][0];
-            //int intY = Y - 64; // -(la position de A en ascci)
-            //Point coordonnee = new Point(intY-1 , Int32.Parse(tabAttaque[0])-1); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
-
             Point coordonnee = new Point(Int32.Parse(tabAttaque[1]), Int32.Parse(tabAttaque[0])); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
             bool bateauToucher = false;
             for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
@@ -177,9 +173,12 @@ namespace BattleShip_Serveur
         {
             try
             {
-                // Envoie au 2 joueurs que les 2 sont connectés pour pouvoir poursuivre avec le jeux
-                envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur1);
-                envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur2);
+                if (_nouvellePartie)
+                {
+                    // Envoie au 2 joueurs que les 2 sont connectés pour pouvoir poursuivre avec le jeux
+                    envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur1);
+                    envoyerReponse("Joueur 1 et Joueur 2 connectés", joueur2);
+                }
                 // Recoit la position des bateaux de chaque joueur et l'affecte à une variable globale
                 flotteJ1 = recevoirPositionBateaux(joueur1);
                 flotteJ2 = recevoirPositionBateaux(joueur2);
@@ -191,20 +190,52 @@ namespace BattleShip_Serveur
                 // Boucle du jeu
                 while (flotteJ1.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
                 {
-                    envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ1.flotte));
+                    envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ2.flotte));
                     if (flotteJ2.FlotteEstVivante())
                     {
                         envoyerReponse(analyserAttaque(recevoirAttaque(joueur2), flotteJ1.flotte));
                     }
                 }
-                // lorsque la partie est terminée, on termine la connection
-                joueur1.Close();
-                joueur2.Close();
+                if (estNouvellePartie(joueur1) && estNouvellePartie(joueur2))
+                {
+                    _nouvellePartie = false;
+                    Run();
+                }
+                else
+                {
+                    // lorsque la partie est terminée, on termine la connection
+                    joueur1.Close();
+                    joueur2.Close();
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+        }
+        /// <summary>
+        /// Reçoit une réponse d'un joueur pour vérifier s'il veut faire une nouvelle game
+        /// </summary>
+        /// <param name="joueur"></param>
+        /// <returns></returns>
+        private bool estNouvellePartie(Socket joueur)
+        {
+            bool nouvellePartie = false;
+            string reponse = "";
+            byte[] buffer = new byte[joueur.SendBufferSize];
+            int byteLecture = joueur.Receive(buffer);
+            byte[] byteFormatter = new byte[byteLecture];
+
+            for (int i = 0; i < byteLecture; ++i)
+            {
+                byteFormatter[i] = buffer[i];
+            }
+            
+            reponse = Encoding.ASCII.GetString(byteFormatter);
+            if (reponse.Equals("NouvellePartie"))
+                nouvellePartie = true;
+
+            return nouvellePartie;
         }
     }
 }

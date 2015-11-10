@@ -44,7 +44,7 @@ namespace BattleShip_Client
         private void PositionBateaux_Load(object sender, EventArgs e)
         {
             remplirDgv(DGV_Choix);
-            BTN_Jouer.Enabled = false;
+           // BTN_Jouer.Enabled = false;
         }
         private void remplirDgv(DataGridView dgv)
         {

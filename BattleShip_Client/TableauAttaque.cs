@@ -25,13 +25,14 @@ namespace BattleShip_Client
             CopyDataGridView(mesBateaux, DGV_Perso);
             //Retien mon socket de^PositionBateaux
             socket = org_socket;
+            RecevoirOrdre();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             remplirDgv(DGV_Attaque);
-            RecevoirOrdre();
         }
+
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
         {
@@ -59,7 +60,6 @@ namespace BattleShip_Client
                 MessageBox.Show("Vous êtes deuxième et votre adversaire est:" + tabreponse[1].ToString());
                 BTN_Attaquer.Enabled = false;
                 _monTour = false;
-                RecevoirReponse();
             }
         }
 
@@ -99,6 +99,7 @@ namespace BattleShip_Client
         //Reçoit le résultat de son coup
         private void RecevoirReponse()
         {
+            DialogResult dialogResult;
             string reponse;
             byte[] buffer = new byte[socket.SendBufferSize];
             int byteLecture = socket.Receive(buffer);
@@ -130,15 +131,18 @@ namespace BattleShip_Client
                     if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
                     {
                         if (tabreponse[4] == "1")
-                            MessageBox.Show("Vous avez gagné!");
-                        DialogResult dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                            dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                        else
+                            dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
                         {
-                            //do something
+                            envoyerMessageNouvellePartie();
+                            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                            Dispose(); //to turn off current app
                         }
                         else if (dialogResult == DialogResult.No)
                         {
-                            Close();
+                            Dispose();
                         }
                         else
                             MessageBox.Show("Vous avez perdu :-(");
@@ -163,6 +167,12 @@ namespace BattleShip_Client
             DGV_Attaque.Refresh();
             if (BTN_Attaquer.Enabled == false)
                 RecevoirReponse();
+        }
+
+        private void envoyerMessageNouvellePartie()
+        {
+            byte[] data = Encoding.ASCII.GetBytes("NouvellePartie");
+            socket.Send(data);
         }
 
         private void EnvoyerAttaque()

@@ -190,7 +190,7 @@ namespace BattleShip_Serveur
                 envoyerReponse("2 " + (joueur1.RemoteEndPoint as IPEndPoint).Address, joueur2);
 
                 // Boucle du jeu
-                while (flotteJ1.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
+                while (flotteJ1.FlotteEstVivante() && flotteJ2.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
                 {
                     envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ2.flotte));
                     if (flotteJ2.FlotteEstVivante())

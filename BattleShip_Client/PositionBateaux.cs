@@ -28,6 +28,7 @@ namespace BattleShip_Client
         private List<Bateau> _bateaux = new List<Bateau>();
         private List<int> _positions = new List<int>();
         private Flotte flotte = null;
+        private Color couleurBateau = Color.Empty;
 
         // Nom des bateaux
         const string bateau1 = "Porte-Avions";
@@ -77,6 +78,7 @@ namespace BattleShip_Client
         {
             if (RB_PorteAvion.Checked)
             {
+                couleurBateau = Color.FromArgb(11, 59, 11); //vert foncé
                 changerCell(e, "A");
                 if (casesRestantes == 0)
                 {
@@ -88,6 +90,7 @@ namespace BattleShip_Client
 
             if (RB_Croiseur.Checked)
             {
+                couleurBateau = Color.FromArgb(8, 138, 8); //vert moin foncé
                 changerCell(e, "B");
                 if (casesRestantes == 0 && RB_Croiseur.Checked)
                 {
@@ -98,6 +101,7 @@ namespace BattleShip_Client
             }
             if (RB_CTorpilleur.Checked)
             {
+                couleurBateau = Color.FromArgb(4, 180, 4); //vert
                 changerCell(e, "C");
                 if (casesRestantes == 0)
                 {
@@ -108,6 +112,7 @@ namespace BattleShip_Client
             }
             if (RB_SousMarin.Checked)
             {
+                couleurBateau = Color.FromArgb(1, 223, 1); //vert moin pale
                 changerCell(e, "D");
                 if (casesRestantes == 0)
                 {
@@ -118,6 +123,7 @@ namespace BattleShip_Client
             }
             if (RB_Torpilleur.Checked)
             {
+                couleurBateau = Color.FromArgb(0, 255, 0); //vert pale
                 changerCell(e, "E");
                 if (casesRestantes == 0)
                 {
@@ -251,9 +257,6 @@ namespace BattleShip_Client
 
         private void changerCell(DataGridViewCellEventArgs e, string marqueurBateau)
         {
-            DataGridViewCellStyle styleBateau = new DataGridViewCellStyle();
-            styleBateau.BackColor = Color.Green;
-            styleBateau.ForeColor = Color.Green;
             if (!DGV_Choix.CurrentCell.Value.Equals(marqueurBateau))
             {
                 int rangee = e.RowIndex;
@@ -268,7 +271,8 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
-                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style = styleBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style.ForeColor = couleurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style.BackColor = couleurBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -282,7 +286,8 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee + i].Cells[colonne].Value = marqueurBateau;
-                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Style = styleBateau;
+                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Style.ForeColor = couleurBateau;
+                                    DGV_Choix.Rows[rangee + i].Cells[colonne].Style.BackColor = couleurBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -296,7 +301,8 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne - i].Value = marqueurBateau;
-                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Style = styleBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Style.ForeColor = couleurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne - i].Style.BackColor = couleurBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -310,7 +316,8 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee - i].Cells[colonne].Value = marqueurBateau;
-                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Style = styleBateau;
+                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Style.ForeColor = couleurBateau;
+                                    DGV_Choix.Rows[rangee - i].Cells[colonne].Style.BackColor = couleurBateau;
                                 }
                                 casesRestantes = 0;
                             }
@@ -324,7 +331,8 @@ namespace BattleShip_Client
                                 for (int i = 0; i < (casesRestantes); i++)
                                 {
                                     DGV_Choix.Rows[rangee].Cells[colonne + i].Value = marqueurBateau;
-                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style = styleBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style.ForeColor = couleurBateau;
+                                    DGV_Choix.Rows[rangee].Cells[colonne + i].Style.BackColor = couleurBateau;
                                 }
                                 casesRestantes = 0;
                             }

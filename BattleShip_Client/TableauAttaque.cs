@@ -47,6 +47,8 @@ namespace BattleShip_Client
             LB_GrilleAttaque.Visible = b;
             LB_GrillePerso.Visible = b;
             BTN_Attaquer.Visible = b;
+            LB_MsgAttaque.Visible = b;
+            panel1.Visible = b;
 
             DGV_Attaque.ClearSelection();
             DGV_Perso.ClearSelection();
@@ -143,17 +145,19 @@ namespace BattleShip_Client
             {
                 if (_monTour)
                 {
-                    MessageBox.Show("Touché!");
+                    LB_MsgAttaque.Text = "Touché!";
+                    LB_MsgAttaque.ForeColor = Color.Green;
                     DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                 }
                 else
                 {
-                    MessageBox.Show("Touché");
+                    LB_MsgAttaque.Text = "Touché!";
+                    LB_MsgAttaque.ForeColor = Color.Red;
                     DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                 }
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
-                    MessageBox.Show(tabreponse[3] + " coulé!");
+                    LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
                     if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
                     {
                         if (tabreponse[4] == "1")
@@ -171,8 +175,6 @@ namespace BattleShip_Client
                             envoyerMessageNouvellePartie("Non");
                             Dispose();
                         }
-                        else
-                            MessageBox.Show("Vous avez perdu :-(");
                     }
                 }
             }
@@ -180,12 +182,14 @@ namespace BattleShip_Client
             {
                 if (_monTour)
                 {
-                    MessageBox.Show("Manqué");
+                    LB_MsgAttaque.Text = "Manqué!";
+                    LB_MsgAttaque.ForeColor = Color.Red;
                     DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                 }
                 else
                 {
-                    MessageBox.Show("Manqué!");
+                    LB_MsgAttaque.Text = "Manqué!";
+                    LB_MsgAttaque.ForeColor = Color.Green;
                     DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                 }
             }
@@ -193,7 +197,9 @@ namespace BattleShip_Client
             _monTour = !_monTour;
             DGV_Attaque.Refresh();
             if (!_monTour)
-              RecevoirReponse();
+            {
+                RecevoirReponse();
+            }
         }
 
         private void envoyerMessageNouvellePartie(string reponse)
@@ -272,16 +278,28 @@ namespace BattleShip_Client
             RendreToutVisible(true);
             if (!_monTour)
             {
+                BTN_Attaquer.Text = "En attente";
                 Thread monThreadTour2 = new Thread(RecevoirReponse);
                 monThreadTour2.Start();
             }
-            
         }
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
             socket.Dispose();
             Dispose();
+        }
+
+        private void BTN_Attaquer_EnabledChanged(object sender, EventArgs e)
+        {
+            if (!_monTour)
+            {
+                BTN_Attaquer.Text = "Lancer attaque";
+            }
+            else
+            {
+                BTN_Attaquer.Text = "En attente";
+            }
         }
     }
 }

@@ -57,8 +57,11 @@
             this.BTN_Demarrer = new System.Windows.Forms.Button();
             this.LB_Demarrer = new System.Windows.Forms.Label();
             this.lb_MSGJoueurConnection = new System.Windows.Forms.Label();
+            this.LB_MsgAttaque = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // LB_GrilleAttaque
@@ -193,13 +196,14 @@
             // 
             // BTN_Attaquer
             // 
-            this.BTN_Attaquer.Location = new System.Drawing.Point(346, 282);
+            this.BTN_Attaquer.Location = new System.Drawing.Point(323, 282);
             this.BTN_Attaquer.Margin = new System.Windows.Forms.Padding(2);
             this.BTN_Attaquer.Name = "BTN_Attaquer";
-            this.BTN_Attaquer.Size = new System.Drawing.Size(105, 20);
+            this.BTN_Attaquer.Size = new System.Drawing.Size(128, 23);
             this.BTN_Attaquer.TabIndex = 4;
             this.BTN_Attaquer.Text = "Lancer attaque";
             this.BTN_Attaquer.UseVisualStyleBackColor = true;
+            this.BTN_Attaquer.EnabledChanged += new System.EventHandler(this.BTN_Attaquer_EnabledChanged);
             this.BTN_Attaquer.Click += new System.EventHandler(this.BTN_Attaquer_Click);
             // 
             // DGV_Perso
@@ -348,11 +352,33 @@
             this.lb_MSGJoueurConnection.Size = new System.Drawing.Size(0, 13);
             this.lb_MSGJoueurConnection.TabIndex = 8;
             // 
+            // LB_MsgAttaque
+            // 
+            this.LB_MsgAttaque.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LB_MsgAttaque.AutoEllipsis = true;
+            this.LB_MsgAttaque.AutoSize = true;
+            this.LB_MsgAttaque.Location = new System.Drawing.Point(28, 7);
+            this.LB_MsgAttaque.Name = "LB_MsgAttaque";
+            this.LB_MsgAttaque.Size = new System.Drawing.Size(0, 13);
+            this.LB_MsgAttaque.TabIndex = 9;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.LB_MsgAttaque);
+            this.panel1.Location = new System.Drawing.Point(323, 21);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(128, 26);
+            this.panel1.TabIndex = 10;
+            // 
             // TableauAttaque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 329);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.lb_MSGJoueurConnection);
             this.Controls.Add(this.LB_Demarrer);
             this.Controls.Add(this.BTN_Demarrer);
@@ -369,6 +395,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,6 +432,8 @@
         private System.Windows.Forms.Button BTN_Demarrer;
         private System.Windows.Forms.Label LB_Demarrer;
         private System.Windows.Forms.Label lb_MSGJoueurConnection;
+        private System.Windows.Forms.Label LB_MsgAttaque;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

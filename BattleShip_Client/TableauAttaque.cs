@@ -68,20 +68,24 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
+            this.Invoke((MethodInvoker)delegate ()
+            {
+                if (tabreponse[0] == "1")
+                {
 
-            if (tabreponse[0] == "1")
-            {
-                LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
-                BTN_Attaquer.Enabled = true;
-                _monTour = true;
-            }
-            else
-            {
-                LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
-                BTN_Attaquer.Enabled = false;
-                _monTour = false;
-            }
-            BTN_Demarrer.Enabled = true;
+                        LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
+                
+                    BTN_Attaquer.Enabled = true;
+                    _monTour = true;
+                }
+                else
+                {
+                    LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
+                    BTN_Attaquer.Enabled = false;
+                    _monTour = false;
+                }
+                BTN_Demarrer.Enabled = true;
+            });
         }
 
         private void remplirDgv(DataGridView dgv)
@@ -139,67 +143,71 @@ namespace BattleShip_Client
             }
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
+       
             string[] tabreponse = reponse.Split(' ');
-            //Si le coup touche un bateau
-            if (tabreponse[0] == "True")
+            this.Invoke((MethodInvoker)delegate ()
             {
-                if (_monTour)
+                //Si le coup touche un bateau
+                if (tabreponse[0] == "True")
                 {
-                    LB_MsgAttaque.Text = "Touché!";
-                    LB_MsgAttaque.ForeColor = Color.Green;
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
-                }
-                else
-                {
-                    LB_MsgAttaque.Text = "Touché!";
-                    LB_MsgAttaque.ForeColor = Color.Red;
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
-                }
-                if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
-                {
-                    LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
-                    if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
+                    if (_monTour)
                     {
-                        if (tabreponse[4] == "1")
-                            dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
-                        else
-                            dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
-                        if (dialogResult == DialogResult.Yes)
+                        LB_MsgAttaque.Text = "Touché!";
+                        LB_MsgAttaque.ForeColor = Color.Green;
+                        DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                    }
+                    else
+                    {
+                        LB_MsgAttaque.Text = "Touché!";
+                        LB_MsgAttaque.ForeColor = Color.Red;
+                        DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                    }
+                    if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
+                    {
+                        LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
+                        if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
                         {
-                            envoyerMessageNouvellePartie("NouvellePartie");
-                            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-                            Dispose(); //to turn off current app
-                        }
-                        else if (dialogResult == DialogResult.No)
-                        {
-                            envoyerMessageNouvellePartie("Non");
-                            Dispose();
+                            if (tabreponse[4] == "1")
+                                dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                            else
+                                dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                envoyerMessageNouvellePartie("NouvellePartie");
+                                System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                                Dispose(); //to turn off current app
+                            }
+                            else if (dialogResult == DialogResult.No)
+                            {
+                                envoyerMessageNouvellePartie("Non");
+                                Dispose();
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                if (_monTour)
-                {
-                    LB_MsgAttaque.Text = "Manqué!";
-                    LB_MsgAttaque.ForeColor = Color.Red;
-                    DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
-                }
                 else
                 {
-                    LB_MsgAttaque.Text = "Manqué!";
-                    LB_MsgAttaque.ForeColor = Color.Green;
-                    DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
+                    if (_monTour)
+                    {
+                        LB_MsgAttaque.Text = "Manqué!";
+                        LB_MsgAttaque.ForeColor = Color.Red;
+                        DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
+                    }
+                    else
+                    {
+                        LB_MsgAttaque.Text = "Manqué!";
+                        LB_MsgAttaque.ForeColor = Color.Green;
+                        DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
+                    }
                 }
-            }
-            BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
-            _monTour = !_monTour;
-            DGV_Attaque.Refresh();
-            if (!_monTour)
-            {
-                RecevoirReponse();
-            }
+                BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
+                _monTour = !_monTour;
+                DGV_Attaque.Refresh();
+                if (!_monTour)
+                {
+                    RecevoirReponse();
+                }
+            });
         }
 
         private void envoyerMessageNouvellePartie(string reponse)

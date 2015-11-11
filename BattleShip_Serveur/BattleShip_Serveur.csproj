@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BattleShip_Classes">
-      <HintPath>..\libs\BattleShip_Classes.dll</HintPath>
+      <HintPath>..\lib\BattleShip_Classes.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

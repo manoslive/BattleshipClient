@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -394,7 +395,8 @@ namespace BattleShip_Client
                 // Connection du joueur au socket
                 socket.Connect(localEndPoint);
                 // Attendre la connection du prochain cjoueur
-                AttendreProchainJoueur();
+                Thread threadAttendreConnection = new Thread(AttendreProchainJoueur);
+                threadAttendreConnection.Start();
                 // On envoie la flotte au serveur
                 EnvoyerFlotte();
                 // On démarre la partie
@@ -411,7 +413,6 @@ namespace BattleShip_Client
         private void AttendreProchainJoueur()
         {
             Cursor.Current = Cursors.WaitCursor;
-            MessageBox.Show("En attente de votre adversaire");
             byte[] buffer = new byte[200];
             int byteLecture = socket.Receive(buffer);
             byte[] byteFormatter = new byte[byteLecture];
@@ -422,7 +423,6 @@ namespace BattleShip_Client
 
             string connectionJoueur = Encoding.ASCII.GetString(byteFormatter);
             Cursor.Current = Cursors.Default;
-            MessageBox.Show(connectionJoueur);
         }
 
         private void PositionBateaux_FormClosing(object sender, FormClosingEventArgs e)

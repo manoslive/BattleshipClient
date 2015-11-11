@@ -27,7 +27,8 @@ namespace BattleShip_Client
             CopyDataGridView(mesBateaux, DGV_Perso);
             //Retien mon socket de PositionBateaux
             socket = org_socket;
-            RecevoirOrdre();
+            Thread threadConnectionJoueur = new Thread(RecevoirOrdre);
+            threadConnectionJoueur.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -78,6 +79,7 @@ namespace BattleShip_Client
                 BTN_Attaquer.Enabled = false;
                 _monTour = false;
             }
+            BTN_Demarrer.Enabled = true;
         }
 
         private void remplirDgv(DataGridView dgv)
@@ -115,7 +117,7 @@ namespace BattleShip_Client
             DGV_Perso.ClearSelection();
         }
         //Reçoit le résultat de son coup
-        public void RecevoirReponse()
+        private void RecevoirReponse()
         {
             DataGridViewCellStyle toucheStyle = new DataGridViewCellStyle();
             toucheStyle.BackColor = Color.Red;
@@ -255,6 +257,11 @@ namespace BattleShip_Client
                         _cibleSelectionnee = true;
                         DGV_Attaque.ClearSelection();
                         DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                    }
+                    else
+                    {
+                        _cibleSelectionnee = false;
+                        DGV_Attaque.ClearSelection();
                     }
                 }
             }

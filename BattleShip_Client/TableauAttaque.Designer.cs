@@ -56,6 +56,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.BTN_Demarrer = new System.Windows.Forms.Button();
             this.LB_Demarrer = new System.Windows.Forms.Label();
+            this.lb_MSGJoueurConnection = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Attaque)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DGV_Perso)).BeginInit();
             this.SuspendLayout();
@@ -320,6 +321,7 @@
             // 
             // BTN_Demarrer
             // 
+            this.BTN_Demarrer.Enabled = false;
             this.BTN_Demarrer.Location = new System.Drawing.Point(414, 156);
             this.BTN_Demarrer.Name = "BTN_Demarrer";
             this.BTN_Demarrer.Size = new System.Drawing.Size(75, 39);
@@ -332,17 +334,26 @@
             // 
             this.LB_Demarrer.AutoSize = true;
             this.LB_Demarrer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LB_Demarrer.Location = new System.Drawing.Point(302, 121);
+            this.LB_Demarrer.Location = new System.Drawing.Point(346, 123);
             this.LB_Demarrer.Name = "LB_Demarrer";
-            this.LB_Demarrer.Size = new System.Drawing.Size(292, 19);
+            this.LB_Demarrer.Size = new System.Drawing.Size(205, 19);
             this.LB_Demarrer.TabIndex = 7;
-            this.LB_Demarrer.Text = "\"Vous êtes premier et votre adversaire est:\"";
+            this.LB_Demarrer.Text = "En attente de votre adversaire";
+            // 
+            // lb_MSGJoueurConnection
+            // 
+            this.lb_MSGJoueurConnection.AutoSize = true;
+            this.lb_MSGJoueurConnection.Location = new System.Drawing.Point(411, 99);
+            this.lb_MSGJoueurConnection.Name = "lb_MSGJoueurConnection";
+            this.lb_MSGJoueurConnection.Size = new System.Drawing.Size(0, 13);
+            this.lb_MSGJoueurConnection.TabIndex = 8;
             // 
             // TableauAttaque
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(918, 329);
+            this.Controls.Add(this.lb_MSGJoueurConnection);
             this.Controls.Add(this.LB_Demarrer);
             this.Controls.Add(this.BTN_Demarrer);
             this.Controls.Add(this.label1);
@@ -392,6 +403,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button BTN_Demarrer;
         private System.Windows.Forms.Label LB_Demarrer;
+        private System.Windows.Forms.Label lb_MSGJoueurConnection;
     }
 }
 

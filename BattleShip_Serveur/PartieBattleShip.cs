@@ -60,6 +60,7 @@ namespace BattleShip_Serveur
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 1");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 0");
+                Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") a gagné la partie");
             }
 
             // Si le joueur2 a gagné on envoie les réponses correspondante
@@ -67,6 +68,7 @@ namespace BattleShip_Serveur
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 0");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 1");
+                Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") a gagné la partie");
             }
 
             else
@@ -205,7 +207,9 @@ namespace BattleShip_Serveur
                 {
                     // lorsque la partie est terminée, on termine la connection
                     joueur1.Close();
+                    Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
                     joueur2.Close();
+                    Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
                 }
             }
             catch (Exception e)

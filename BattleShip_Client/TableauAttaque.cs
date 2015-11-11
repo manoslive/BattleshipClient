@@ -24,7 +24,7 @@ namespace BattleShip_Client
             InitializeComponent();
             //Copie ton DGV PositionBateaux au nouveau DGV
             CopyDataGridView(mesBateaux, DGV_Perso);
-            //Retien mon socket de^PositionBateaux
+            //Retien mon socket de PositionBateaux
             socket = org_socket;
             RecevoirOrdre();
         }
@@ -269,6 +269,7 @@ namespace BattleShip_Client
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
+            socket.Dispose();
             Dispose();
         }
     }

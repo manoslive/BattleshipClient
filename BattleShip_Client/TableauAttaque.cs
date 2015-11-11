@@ -18,7 +18,7 @@ namespace BattleShip_Client
         private static Socket socket;
         private bool _monTour = false;
         private bool _cibleSelectionnee = false;
-        Color orgStyle;
+        Color orgStyle = Color.Empty;
         public TableauAttaque(Socket org_socket, DataGridView mesBateaux)
         {
             InitializeComponent();
@@ -48,8 +48,6 @@ namespace BattleShip_Client
 
             DGV_Attaque.ClearSelection();
             DGV_Perso.ClearSelection();
-            
-            orgStyle = DGV_Perso.Rows[0].Cells[0].Style.BackColor;
         }
         // Reçoit le message d'ordre de passage
         private void RecevoirOrdre()
@@ -229,7 +227,7 @@ namespace BattleShip_Client
             {
                 if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
                 {
-                    if(DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor == orgStyle)
+                    if(DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor.Equals(orgStyle))
                         DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
                 }
             }

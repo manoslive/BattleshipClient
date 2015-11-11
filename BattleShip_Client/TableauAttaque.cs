@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -64,7 +65,7 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-           
+
             if (tabreponse[0] == "1")
             {
                 LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
@@ -83,7 +84,7 @@ namespace BattleShip_Client
         {
             char lettre = 'A';
             dgv.RowHeadersWidth = 55;
-           
+
             for (int i = 0; i < 10; i++)
             {
                 if (dgv.Rows.Count != 0)
@@ -114,7 +115,7 @@ namespace BattleShip_Client
             DGV_Perso.ClearSelection();
         }
         //Reçoit le résultat de son coup
-        private void RecevoirReponse()
+        public void RecevoirReponse()
         {
             DataGridViewCellStyle toucheStyle = new DataGridViewCellStyle();
             toucheStyle.BackColor = Color.Red;
@@ -136,7 +137,7 @@ namespace BattleShip_Client
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
             //Si le coup touche un bateau
-            if(tabreponse[0] == "True")
+            if (tabreponse[0] == "True")
             {
                 if (_monTour)
                 {
@@ -189,8 +190,8 @@ namespace BattleShip_Client
             BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
             _monTour = !_monTour;
             DGV_Attaque.Refresh();
-            if (BTN_Attaquer.Enabled == false)
-                RecevoirReponse();
+            if (!_monTour)
+              RecevoirReponse();
         }
 
         private void envoyerMessageNouvellePartie(string reponse)
@@ -207,7 +208,8 @@ namespace BattleShip_Client
             string coordonnees = X + " " + Y;
             byte[] data = Encoding.ASCII.GetBytes(coordonnees);
             socket.Send(data);
-            RecevoirReponse();
+            Thread monThreadTour1 = new Thread(RecevoirReponse);
+            monThreadTour1.Start();
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)
@@ -227,7 +229,7 @@ namespace BattleShip_Client
             {
                 if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
                 {
-                    if(DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor.Equals(orgStyle))
+                    if (DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor.Equals(orgStyle))
                         DGV_Attaque.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
                 }
             }
@@ -262,7 +264,11 @@ namespace BattleShip_Client
         {
             RendreToutVisible(true);
             if (!_monTour)
-                RecevoirReponse();
+            {
+                Thread monThreadTour2 = new Thread(RecevoirReponse);
+                monThreadTour2.Start();
+            }
+            
         }
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)

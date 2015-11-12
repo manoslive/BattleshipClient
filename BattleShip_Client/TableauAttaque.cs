@@ -68,24 +68,35 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-            this.Invoke((MethodInvoker)delegate ()
+            if (tabreponse[0] == "1")
             {
-                if (tabreponse[0] == "1")
+                if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                 {
-
-                        LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
-                
-                    BTN_Attaquer.Enabled = true;
-                    _monTour = true;
+                    Action act = () => LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
+                    LB_Demarrer.Invoke(act);
+                    Action act2 = () => BTN_Attaquer.Enabled = true;
+                    BTN_Attaquer.Invoke(act2);
                 }
                 else
                 {
-                    LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
-                    BTN_Attaquer.Enabled = false;
-                    _monTour = false;
+                    LB_Demarrer.Text = ("Vous êtes premier et votre adversaire est: " + tabreponse[1].ToString());
+                    BTN_Attaquer.Enabled = true;
                 }
+                _monTour = true;
+            }
+            else
+            {
+                LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
+                BTN_Attaquer.Enabled = false;
+                _monTour = false;
+            }
+            if (BTN_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
+            {
+                Action act3 = () => BTN_Demarrer.Enabled = true;
+                BTN_Demarrer.Invoke(act3);
+            }
+            else
                 BTN_Demarrer.Enabled = true;
-            });
         }
 
         private void remplirDgv(DataGridView dgv)
@@ -143,18 +154,40 @@ namespace BattleShip_Client
             }
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
-       
+
             string[] tabreponse = reponse.Split(' ');
-            this.Invoke((MethodInvoker)delegate ()
+
+            //Si le coup touche un bateau
+            if (tabreponse[0] == "True")
             {
-                //Si le coup touche un bateau
-                if (tabreponse[0] == "True")
+                if (_monTour)
                 {
-                    if (_monTour)
+                    if (LB_MsgAttaque.InvokeRequired)
+                    {
+                        Action act1 = () => LB_MsgAttaque.Text = "Touché!";
+                        LB_MsgAttaque.Invoke(act1);
+                        Action act2 = () => LB_MsgAttaque.ForeColor = Color.Green;
+                        LB_MsgAttaque.Invoke(act2);
+                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        DGV_Attaque.Invoke(act3);
+                    }
+                    else
                     {
                         LB_MsgAttaque.Text = "Touché!";
                         LB_MsgAttaque.ForeColor = Color.Green;
                         DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                    }
+                }
+                else
+                {
+                    if (LB_MsgAttaque.InvokeRequired)
+                    {
+                        Action act1 = () => LB_MsgAttaque.Text = "Touché!";
+                        LB_MsgAttaque.Invoke(act1);
+                        Action act2 = () => LB_MsgAttaque.ForeColor = Color.Red;
+                        LB_MsgAttaque.Invoke(act2);
+                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        DGV_Perso.Invoke(act3);
                     }
                     else
                     {
@@ -162,36 +195,60 @@ namespace BattleShip_Client
                         LB_MsgAttaque.ForeColor = Color.Red;
                         DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                     }
-                    if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
+                }
+                if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
+                {
+                    LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
+                    if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
                     {
-                        LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
-                        if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
+                        if (tabreponse[4] == "1")
+                            dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                        else
+                            dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
                         {
-                            if (tabreponse[4] == "1")
-                                dialogResult = MessageBox.Show("Vous avez gagné \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
-                            else
-                                dialogResult = MessageBox.Show("Vous avez perdu \n Play Again ?", "Fini", MessageBoxButtons.YesNo);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                envoyerMessageNouvellePartie("NouvellePartie");
-                                System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-                                Dispose(); //to turn off current app
-                            }
-                            else if (dialogResult == DialogResult.No)
-                            {
-                                envoyerMessageNouvellePartie("Non");
-                                Dispose();
-                            }
+                            envoyerMessageNouvellePartie("NouvellePartie");
+                            System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                            Dispose(); //to turn off current app
+                        }
+                        else if (dialogResult == DialogResult.No)
+                        {
+                            envoyerMessageNouvellePartie("Non");
+                            Dispose();
                         }
                     }
                 }
-                else
+            }
+            else
+            {
+                if (_monTour)
                 {
-                    if (_monTour)
+                    if (LB_MsgAttaque.InvokeRequired)
+                    {
+                        Action act1 = () => LB_MsgAttaque.Text = "Manqué!";
+                        LB_MsgAttaque.Invoke(act1);
+                        Action act2 = () => LB_MsgAttaque.ForeColor = Color.Red;
+                        LB_MsgAttaque.Invoke(act2);
+                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        DGV_Attaque.Invoke(act3);
+                    }
+                    else
                     {
                         LB_MsgAttaque.Text = "Manqué!";
                         LB_MsgAttaque.ForeColor = Color.Red;
                         DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
+                    }
+                }
+                else
+                {
+                    if (LB_MsgAttaque.InvokeRequired)
+                    {
+                        Action act1 = () => LB_MsgAttaque.Text = "Manqué!";
+                        LB_MsgAttaque.Invoke(act1);
+                        Action act2 = () => LB_MsgAttaque.ForeColor = Color.Green;
+                        LB_MsgAttaque.Invoke(act2);
+                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        DGV_Perso.Invoke(act3);
                     }
                     else
                     {
@@ -200,14 +257,27 @@ namespace BattleShip_Client
                         DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                     }
                 }
+            }
+            if (LB_MsgAttaque.InvokeRequired)
+            {
+                Action act1 = () => BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
+                BTN_Attaquer.Invoke(act1);
+                Action act2 = () => DGV_Attaque.Refresh();
+                DGV_Attaque.Invoke(act2);
+                Action act3 = () => this.Refresh();
+                this.Invoke(act3);
+            }
+            else
+            {
                 BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
-                _monTour = !_monTour;
                 DGV_Attaque.Refresh();
-                if (!_monTour)
-                {
-                    RecevoirReponse();
-                }
-            });
+                this.Refresh();
+            }
+            _monTour = !_monTour;
+            if (!_monTour)
+            {
+                RecevoirReponse();
+            }
         }
 
         private void envoyerMessageNouvellePartie(string reponse)

@@ -24,7 +24,7 @@ namespace BattleShip_Client
         private int direction = 3;
         private static Socket socket;
         private IPEndPoint localEndPoint;
-        private const string ip = "192.168.0.110";
+        private const string ip = "127.0.0.1";
         private const int port = 666;
         private List<Bateau> _bateaux = new List<Bateau>();
         private List<int> _positions = new List<int>();

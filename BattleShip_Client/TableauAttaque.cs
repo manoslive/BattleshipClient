@@ -186,7 +186,7 @@ namespace BattleShip_Client
                         LB_MsgAttaque.Invoke(act1);
                         Action act2 = () => LB_MsgAttaque.ForeColor = Color.Red;
                         LB_MsgAttaque.Invoke(act2);
-                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        Action act3 = () => DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
                         DGV_Perso.Invoke(act3);
                     }
                     else
@@ -198,7 +198,13 @@ namespace BattleShip_Client
                 }
                 if (tabreponse.Length > 3)//si tabreponse[3] existe, il contient le bateau coulé
                 {
-                    LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
+                    if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
+                    {
+                        Action act1 = () => LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
+                        LB_MsgAttaque.Invoke(act1);
+                    }
+                    else
+                        LB_MsgAttaque.Text = tabreponse[3] + " coulé!";
                     if (tabreponse.Length > 4)//si tabreponse[4] existe, quelqu'un à gagné, le match est fini
                     {
                         if (tabreponse[4] == "1")
@@ -229,7 +235,7 @@ namespace BattleShip_Client
                         LB_MsgAttaque.Invoke(act1);
                         Action act2 = () => LB_MsgAttaque.ForeColor = Color.Red;
                         LB_MsgAttaque.Invoke(act2);
-                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                         DGV_Attaque.Invoke(act3);
                     }
                     else
@@ -247,7 +253,7 @@ namespace BattleShip_Client
                         LB_MsgAttaque.Invoke(act1);
                         Action act2 = () => LB_MsgAttaque.ForeColor = Color.Green;
                         LB_MsgAttaque.Invoke(act2);
-                        Action act3 = () => DGV_Attaque.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = toucheStyle;
+                        Action act3 = () => DGV_Perso.Rows[Int32.Parse(tabreponse[2])].Cells[Int32.Parse(tabreponse[1])].Style = manqueStyle;
                         DGV_Perso.Invoke(act3);
                     }
                     else
@@ -258,7 +264,7 @@ namespace BattleShip_Client
                     }
                 }
             }
-            if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
+            if (BTN_Attaquer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
             {
                 Action act1 = () => BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
                 BTN_Attaquer.Invoke(act1);
@@ -296,6 +302,7 @@ namespace BattleShip_Client
             socket.Send(data);
             Thread monThreadTour1 = new Thread(RecevoirReponse);
             monThreadTour1.Start();
+            Dispose();
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)

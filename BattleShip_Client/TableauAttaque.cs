@@ -162,7 +162,7 @@ namespace BattleShip_Client
             {
                 if (_monTour)
                 {
-                    if (LB_MsgAttaque.InvokeRequired)
+                    if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                     {
                         Action act1 = () => LB_MsgAttaque.Text = "Touché!";
                         LB_MsgAttaque.Invoke(act1);
@@ -180,7 +180,7 @@ namespace BattleShip_Client
                 }
                 else
                 {
-                    if (LB_MsgAttaque.InvokeRequired)
+                    if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                     {
                         Action act1 = () => LB_MsgAttaque.Text = "Touché!";
                         LB_MsgAttaque.Invoke(act1);
@@ -223,7 +223,7 @@ namespace BattleShip_Client
             {
                 if (_monTour)
                 {
-                    if (LB_MsgAttaque.InvokeRequired)
+                    if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                     {
                         Action act1 = () => LB_MsgAttaque.Text = "Manqué!";
                         LB_MsgAttaque.Invoke(act1);
@@ -241,7 +241,7 @@ namespace BattleShip_Client
                 }
                 else
                 {
-                    if (LB_MsgAttaque.InvokeRequired)
+                    if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                     {
                         Action act1 = () => LB_MsgAttaque.Text = "Manqué!";
                         LB_MsgAttaque.Invoke(act1);
@@ -258,7 +258,7 @@ namespace BattleShip_Client
                     }
                 }
             }
-            if (LB_MsgAttaque.InvokeRequired)
+            if (LB_MsgAttaque.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
             {
                 Action act1 = () => BTN_Attaquer.Enabled = !BTN_Attaquer.Enabled;
                 BTN_Attaquer.Invoke(act1);

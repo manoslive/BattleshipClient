@@ -84,7 +84,7 @@ namespace BattleShip_Client
                 }
                 _monTour = true;
             }
-            else
+            else if(tabreponse[0] == "2")
             {
                 if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                 {
@@ -97,6 +97,23 @@ namespace BattleShip_Client
                 else
                 {
                     LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
+                    BTN_Attaquer.Enabled = false;
+                    _monTour = false;
+                }
+            }
+            else
+            {
+                if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
+                {
+                    Action act = () => LB_Demarrer.Text = (tabreponse[0].ToString());
+                    LB_Demarrer.Invoke(act);
+                    Action act2 = () => BTN_Attaquer.Enabled = false;
+                    BTN_Attaquer.Invoke(act2);
+                    _monTour = false;
+                }
+                else
+                {
+                    LB_Demarrer.Text = (tabreponse[0].ToString());
                     BTN_Attaquer.Enabled = false;
                     _monTour = false;
                 }
@@ -312,7 +329,6 @@ namespace BattleShip_Client
             socket.Send(data);
             Thread monThreadTour1 = new Thread(RecevoirReponse);
             monThreadTour1.Start();
-            Dispose();
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)

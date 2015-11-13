@@ -191,10 +191,12 @@ namespace BattleShip_Serveur
                 envoyerReponse("2 " + (joueur1.RemoteEndPoint as IPEndPoint).Address, joueur2);
 
                 // Boucle du jeu
-                while (joueur1.Poll(1000, SelectMode.SelectError) && joueur2.Poll(1000, SelectMode.SelectError))
+                //while (joueur1.Poll(1000, SelectMode.SelectError) && joueur2.Poll(1000, SelectMode.SelectError))
+                //{
+
+                //while (flotteJ1.FlotteEstVivante() && flotteJ2.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
+                while (flotteJ1.FlotteEstVivante() && flotteJ2.FlotteEstVivante() && joueur1.Connected && joueur2.Connected)
                 {
-                    while (flotteJ1.FlotteEstVivante() && flotteJ2.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
-                    {
                         envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ2.flotte));
                         if (flotteJ2.FlotteEstVivante())
                         {
@@ -226,7 +228,7 @@ namespace BattleShip_Serveur
                         Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
                         joueur2.Close();
                     }
-                }
+                //}
             }
             catch (Exception e)
             {

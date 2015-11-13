@@ -247,12 +247,24 @@ namespace BattleShip_Client
                         {
                             envoyerMessageNouvellePartie("NouvellePartie");
                             System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-                            Dispose(); //to turn off current app
+                            if (this.InvokeRequired)
+                            {
+                                Action act = () => this.Dispose();
+                                this.Invoke(act); //to turn off current app
+                            }
+                            else
+                                Dispose();
                         }
                         else if (dialogResult == DialogResult.No)
                         {
                             envoyerMessageNouvellePartie("Non");
-                            Dispose();
+                            if (this.InvokeRequired)
+                            {
+                                Action act = () => this.Dispose();
+                                this.Invoke(act); //to turn off current app
+                            }
+                            else
+                                Dispose();
                         }
                     }
                 }

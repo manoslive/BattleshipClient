@@ -296,7 +296,6 @@ namespace BattleShip_Client
                 RecevoirReponse();
             }
         }
-
         private void envoyerMessageNouvellePartie(string reponse)
         {
             byte[] data = Encoding.ASCII.GetBytes(reponse);

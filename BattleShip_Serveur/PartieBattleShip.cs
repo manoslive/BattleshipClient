@@ -21,6 +21,8 @@ namespace BattleShip_Serveur
         Flotte flotteJ1 = null;
         Flotte flotteJ2 = null;
         bool _nouvellePartie = true;
+        bool _joueur1NouvellePartie = false;
+        bool _joueur2NouvellePartie = false;
 
         /// <summary>
         ///  Constructeur paramétrique
@@ -198,13 +200,25 @@ namespace BattleShip_Serveur
                         envoyerReponse(analyserAttaque(recevoirAttaque(joueur2), flotteJ1.flotte));
                     }
                 }
-                if (estNouvellePartie(joueur1) && estNouvellePartie(joueur2))
+                if (estNouvellePartie(joueur1))
+                {
+                    _joueur1NouvellePartie = true;   
+                }
+                if(_joueur1NouvellePartie && estNouvellePartie(joueur2))
                 {
                     _nouvellePartie = false;
                     Run();
                 }
                 else
                 {
+                    if(!_joueur1NouvellePartie)
+                    {
+                        envoyerReponse("Joueur 1 s'est déconnecté", joueur2);
+                    }
+                    else
+                    {
+                        envoyerReponse("Joueur 2 s'est déconnecté", joueur1);
+                    }
                     // lorsque la partie est terminée, on termine la connection
                     Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
                     joueur1.Close(); 

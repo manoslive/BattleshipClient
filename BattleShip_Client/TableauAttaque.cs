@@ -318,7 +318,7 @@ namespace BattleShip_Client
             byte[] data = Encoding.ASCII.GetBytes(reponse);
             socket.Send(data);
         }
-
+        
         private void EnvoyerAttaque()
         {
             int X = 0, Y = 0;

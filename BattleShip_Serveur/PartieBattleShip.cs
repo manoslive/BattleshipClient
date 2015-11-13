@@ -203,13 +203,29 @@ namespace BattleShip_Serveur
                     _nouvellePartie = false;
                     Run();
                 }
+                else if (!estNouvellePartie(joueur1) && estNouvellePartie(joueur2))
+                {
+                    _nouvellePartie = false;
+                    envoyerReponse("3", joueur1);
+                    envoyerReponse("3", joueur2);
+                    Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur1.Close();
+                }
+                else if (estNouvellePartie(joueur1) && !estNouvellePartie(joueur2))
+                {
+                    _nouvellePartie = false;
+                    envoyerReponse("3", joueur1);
+                    envoyerReponse("3", joueur2);
+                    Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur2.Close();
+                }
                 else
                 {
                     // lorsque la partie est terminée, on termine la connection
-                    joueur1.Close();
                     Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
-                    joueur2.Close();
+                    joueur1.Close(); 
                     Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur2.Close();
                 }
             }
             catch (Exception e)

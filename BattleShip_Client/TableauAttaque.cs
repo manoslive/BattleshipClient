@@ -84,9 +84,16 @@ namespace BattleShip_Client
                 }
                 _monTour = true;
             }
-            else
+            else if (tabreponse[0] == "2")
             {
                 LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
+                BTN_Attaquer.Enabled = false;
+                _monTour = false;
+            }
+            else
+            {
+                LB_Demarrer.Text = ("Votre adversaire s'est déconnecté");
+                LB_Demarrer.ForeColor = Color.Red;
                 BTN_Attaquer.Enabled = false;
                 _monTour = false;
             }

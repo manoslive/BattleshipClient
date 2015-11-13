@@ -382,6 +382,7 @@ namespace BattleShip_Client
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
+
             socket.Dispose();
             Dispose();
         }

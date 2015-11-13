@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BattleShip_Classes">
-      <HintPath>..\lib\BattleShip_Classes.dll</HintPath>
+      <HintPath>..\BattleShip_Classes\bin\Debug\BattleShip_Classes.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BattleShip_Serveur\BattleShip_Serveur.csproj">
+      <Project>{6e25a43f-a770-404d-9025-6c0446fe1a09}</Project>
+      <Name>BattleShip_Serveur</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

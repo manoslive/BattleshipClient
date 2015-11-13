@@ -56,7 +56,7 @@ namespace BattleShip_Serveur
             byte[] dataJ2;
 
             // Si le joueur1 a gagné on envoie les réponses correspondante
-            if (flotteJ1.FlotteEstVivante() && !flotteJ2.FlotteEstVivante())
+            if(flotteJ1.FlotteEstVivante() && !flotteJ2.FlotteEstVivante())
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 1");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 0");
@@ -64,7 +64,7 @@ namespace BattleShip_Serveur
             }
 
             // Si le joueur2 a gagné on envoie les réponses correspondante
-            else if (flotteJ2.FlotteEstVivante() && !flotteJ1.FlotteEstVivante())
+            else if(flotteJ2.FlotteEstVivante() && !flotteJ1.FlotteEstVivante())
             {
                 dataJ1 = Encoding.ASCII.GetBytes(reponse + " 0");
                 dataJ2 = Encoding.ASCII.GetBytes(reponse + " 1");
@@ -93,21 +93,21 @@ namespace BattleShip_Serveur
             string[] tabAttaque = attaque.Split(' '); //chiffre lettre (X,Y)
             Point coordonnee = new Point(Int32.Parse(tabAttaque[1]), Int32.Parse(tabAttaque[0])); //switch du x,y car il a un switch up du x,y dans _position.Contains(coordonné)
             bool bateauToucher = false;
-            for (int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
+            for(int i = 0; i < listeBateau.Count && !bateauToucher; ++i)
             {
                 // Si un bateau de la liste contient la coordonnée
-                if (listeBateau[i]._position.Contains(coordonnee))
+                if(listeBateau[i]._position.Contains(coordonnee))
                 {
                     bool rechercheTerminer = false;
-                    for (int j = 0; j < listeBateau[i]._estVivant.Length && !rechercheTerminer; ++j)
+                    for(int j = 0; j < listeBateau[i]._estVivant.Length && !rechercheTerminer; ++j)
                     {
                         // Si la case du bateau n'est pas touchée
-                        if (listeBateau[i]._estVivant[j])
+                        if(listeBateau[i]._estVivant[j])
                         {
                             listeBateau[i]._estVivant[j] = false;
                             rechercheTerminer = true;
                             // Si le bateau est coulé
-                            if (!listeBateau[i].BateauEstVivant())
+                            if(!listeBateau[i].BateauEstVivant())
                             {
                                 bateauToucher = !bateauToucher;
                                 // Le format de retour : (true/false) si le bateau est touché + " " + les_coordonnées_d'attaque + " " + le nom du bateau coulé
@@ -203,17 +203,30 @@ namespace BattleShip_Serveur
                     _nouvellePartie = false;
                     Run();
                 }
-
-                // lorsque la partie est terminée, on termine la connection
-                joueur1.Close();
-                Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
-                joueur2.Close();
-                Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
-            }
-            catch (SocketException s)
-            {
-                //Console.WriteLine(s.Message);
-                //Console.WriteLine(s.StackTrace);
+                else if (!estNouvellePartie(joueur1) && estNouvellePartie(joueur2))
+                {
+                    _nouvellePartie = false;
+                    envoyerReponse("3", joueur1);
+                    envoyerReponse("3", joueur2);
+                    Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur1.Close();
+                }
+                else if (estNouvellePartie(joueur1) && !estNouvellePartie(joueur2))
+                {
+                    _nouvellePartie = false;
+                    envoyerReponse("3", joueur1);
+                    envoyerReponse("3", joueur2);
+                    Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur2.Close();
+                }
+                else
+                {
+                    // lorsque la partie est terminée, on termine la connection
+                    Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur1.Close(); 
+                    Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                    joueur2.Close();
+                }
             }
             catch (Exception e)
             {
@@ -237,7 +250,7 @@ namespace BattleShip_Serveur
             {
                 byteFormatter[i] = buffer[i];
             }
-
+            
             reponse = Encoding.ASCII.GetString(byteFormatter);
             if (reponse.Equals("NouvellePartie"))
                 nouvellePartie = true;

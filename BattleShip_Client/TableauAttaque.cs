@@ -68,8 +68,8 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-            this.Invoke((MethodInvoker)delegate ()
-            {
+            //this.Invoke((MethodInvoker)delegate ()
+            //{
                 if (tabreponse[0] == "1")
                 {
 
@@ -85,7 +85,7 @@ namespace BattleShip_Client
                     _monTour = false;
                 }
                 BTN_Demarrer.Enabled = true;
-            });
+            //});
         }
 
         private void remplirDgv(DataGridView dgv)

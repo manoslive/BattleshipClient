@@ -329,7 +329,6 @@ namespace BattleShip_Client
             socket.Send(data);
             Thread monThreadTour1 = new Thread(RecevoirReponse);
             monThreadTour1.Start();
-            Dispose();
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)

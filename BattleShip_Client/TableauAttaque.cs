@@ -84,13 +84,15 @@ namespace BattleShip_Client
                 }
                 _monTour = true;
             }
-            else if (tabreponse[0] == "2")
+            else
             {
                 if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                 {
                     Action act = () => LB_Demarrer.Text = ("Vous êtes deuxième et votre adversaire est: " + tabreponse[1].ToString());
                     LB_Demarrer.Invoke(act);
                     Action act2 = () => BTN_Attaquer.Enabled = false;
+                    BTN_Attaquer.Invoke(act2);
+                    _monTour = false;
                 }
                 else
                 {
@@ -98,24 +100,6 @@ namespace BattleShip_Client
                     BTN_Attaquer.Enabled = false;
                     _monTour = false;
                 }
-            }
-            else
-            {
-                if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
-                {
-                    Action act = () => LB_Demarrer.Text = ("Votre adversaire s'est déconnecté");
-                    LB_Demarrer.Invoke(act);
-                    Action act3 = () => LB_Demarrer.ForeColor = Color.Red;
-                    LB_Demarrer.Invoke(act3);
-                    Action act2 = () => BTN_Attaquer.Enabled = false;
-                }
-                else
-                {
-                    LB_Demarrer.Text = ("Votre adversaire s'est déconnecté");
-                    LB_Demarrer.ForeColor = Color.Red;
-                    BTN_Attaquer.Enabled = false;
-                }
-                _monTour = false;
             }
             if (BTN_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
             {

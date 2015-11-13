@@ -68,6 +68,7 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
+            MessageBox.Show(tabreponse[0].ToString());
             if (tabreponse[0] == "1")
             {
                 if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
@@ -84,7 +85,7 @@ namespace BattleShip_Client
                 }
                 _monTour = true;
             }
-            else if(tabreponse[0] == "2")
+            else if (tabreponse[0] == "2")
             {
                 if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
                 {
@@ -107,6 +108,8 @@ namespace BattleShip_Client
                 {
                     Action act = () => LB_Demarrer.Text = (tabreponse[0].ToString());
                     LB_Demarrer.Invoke(act);
+                    Action act1 = () => LB_Demarrer.ForeColor = Color.Red;
+                    LB_Demarrer.Invoke(act1);
                     Action act2 = () => BTN_Attaquer.Enabled = false;
                     BTN_Attaquer.Invoke(act2);
                     _monTour = false;
@@ -114,6 +117,7 @@ namespace BattleShip_Client
                 else
                 {
                     LB_Demarrer.Text = (tabreponse[0].ToString());
+                    LB_Demarrer.ForeColor = Color.Red;
                     BTN_Attaquer.Enabled = false;
                     _monTour = false;
                 }

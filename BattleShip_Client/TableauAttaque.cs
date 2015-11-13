@@ -68,7 +68,6 @@ namespace BattleShip_Client
 
             reponse = Encoding.ASCII.GetString(byteFormatter);
             string[] tabreponse = reponse.Split(' ');
-            MessageBox.Show(tabreponse[0].ToString());
             if (tabreponse[0] == "1")
             {
                 if (LB_Demarrer.InvokeRequired)//pour exécuter un délégué qui met à jour le thread d'interface utilisateur
@@ -414,8 +413,8 @@ namespace BattleShip_Client
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
             // EnvoyerMessageServeur("FermerConnexion");
-            Dispose();
             socket.Dispose();
+            Dispose();
         }
 
         private void BTN_Attaquer_EnabledChanged(object sender, EventArgs e)

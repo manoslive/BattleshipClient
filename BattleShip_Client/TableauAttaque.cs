@@ -312,7 +312,7 @@ namespace BattleShip_Client
             socket.Send(data);
             Thread monThreadTour1 = new Thread(RecevoirReponse);
             monThreadTour1.Start();
-            Dispose();
+            // Dispose();
         }
 
         private void BTN_Attaquer_Click(object sender, EventArgs e)
@@ -381,7 +381,7 @@ namespace BattleShip_Client
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            EnvoyerMessageServeur("FermerConnexion");
             socket.Dispose();
             Dispose();
         }
@@ -396,6 +396,12 @@ namespace BattleShip_Client
             {
                 BTN_Attaquer.Text = "En attente";
             }
+        }
+
+        private void EnvoyerMessageServeur(string message)
+        {
+            byte[] data = Encoding.ASCII.GetBytes(message);
+            socket.Send(data);
         }
     }
 }

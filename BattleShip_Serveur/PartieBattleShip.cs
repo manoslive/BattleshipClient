@@ -22,7 +22,6 @@ namespace BattleShip_Serveur
         Flotte flotteJ2 = null;
         bool _nouvellePartie = true;
         bool _joueur1NouvellePartie = false;
-        bool _joueur2NouvellePartie = false;
 
         /// <summary>
         ///  Constructeur paramétrique

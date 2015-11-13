@@ -193,37 +193,37 @@ namespace BattleShip_Serveur
                 // Boucle du jeu
                 while (joueur1.Connected && joueur2.Connected && flotteJ1.FlotteEstVivante() && flotteJ2.FlotteEstVivante() && BattleShip_Serveur.Program.SocketEstConnecte(joueur1) && BattleShip_Serveur.Program.SocketEstConnecte(joueur2))
                 {
-                    envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ2.flotte));
-                    if (flotteJ2.FlotteEstVivante())
-                    {
-                        envoyerReponse(analyserAttaque(recevoirAttaque(joueur2), flotteJ1.flotte));
+                        envoyerReponse(analyserAttaque(recevoirAttaque(joueur1), flotteJ2.flotte));
+                        if (flotteJ2.FlotteEstVivante())
+                        {
+                            envoyerReponse(analyserAttaque(recevoirAttaque(joueur2), flotteJ1.flotte));
+                        }
                     }
-                }
-                if (estNouvellePartie(joueur1))
-                {
-                    _joueur1NouvellePartie = true;
-                }
-                if (_joueur1NouvellePartie && estNouvellePartie(joueur2))
-                {
-                    _nouvellePartie = false;
-                    Run();
-                }
-                else
-                {
-                    if (!_joueur1NouvellePartie)
+                    if (estNouvellePartie(joueur1))
                     {
-                        envoyerReponse("Joueur 1 s'est déconnecté", joueur2);
+                        _joueur1NouvellePartie = true;
+                    }
+                    if (_joueur1NouvellePartie && estNouvellePartie(joueur2))
+                    {
+                        _nouvellePartie = false;
+                        Run();
                     }
                     else
                     {
-                        envoyerReponse("Joueur 2 s'est déconnecté", joueur1);
+                        if (!_joueur1NouvellePartie)
+                        {
+                            envoyerReponse("Joueur 1 s'est déconnecté", joueur2);
+                        }
+                        else
+                        {
+                            envoyerReponse("Joueur 2 s'est déconnecté", joueur1);
+                        }
+                        // lorsque la partie est terminée, on termine la connection
+                        Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                        joueur1.Close();
+                        Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
+                        joueur2.Close();
                     }
-                    // lorsque la partie est terminée, on termine la connection
-                    Console.WriteLine("Le joueur1 (" + (joueur1.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
-                    joueur1.Close();
-                    Console.WriteLine("Le joueur2 (" + (joueur2.RemoteEndPoint as IPEndPoint).Address.ToString() + ") est déconnecté");
-                    joueur2.Close();
-                }
             }
             catch (SocketException a)
             {

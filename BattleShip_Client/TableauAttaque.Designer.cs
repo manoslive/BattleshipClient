@@ -380,7 +380,7 @@
             // 
             // BTN_Quitter
             // 
-            this.BTN_Quitter.Location = new System.Drawing.Point(1114, 369);
+            this.BTN_Quitter.Location = new System.Drawing.Point(1114, 352);
             this.BTN_Quitter.Name = "BTN_Quitter";
             this.BTN_Quitter.Size = new System.Drawing.Size(95, 24);
             this.BTN_Quitter.TabIndex = 11;

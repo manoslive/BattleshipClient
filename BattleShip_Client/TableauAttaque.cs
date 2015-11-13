@@ -397,7 +397,7 @@ namespace BattleShip_Client
 
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
-            EnvoyerMessageServeur("FermerConnexion");
+            // EnvoyerMessageServeur("FermerConnexion");
             socket.Dispose();
             Dispose();
         }
@@ -418,6 +418,16 @@ namespace BattleShip_Client
         {
             byte[] data = Encoding.ASCII.GetBytes(message);
             socket.Send(data);
+        }
+
+        private void BTN_Quitter_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult;
+            dialogResult = MessageBox.Show("Êtes-vous sûr?", "Fin de partie", MessageBoxButtons.YesNo);
+            if(dialogResult == DialogResult.Yes)
+            {
+                Dispose();
+            }
         }
     }
 }

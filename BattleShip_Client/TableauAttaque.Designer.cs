@@ -327,7 +327,7 @@
             // 
             this.BTN_Demarrer.Enabled = false;
             this.BTN_Demarrer.Location = new System.Drawing.Point(552, 192);
-            this.BTN_Demarrer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BTN_Demarrer.Margin = new System.Windows.Forms.Padding(4);
             this.BTN_Demarrer.Name = "BTN_Demarrer";
             this.BTN_Demarrer.Size = new System.Drawing.Size(100, 48);
             this.BTN_Demarrer.TabIndex = 6;
@@ -373,7 +373,7 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.LB_MsgAttaque);
             this.panel1.Location = new System.Drawing.Point(431, 26);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(169, 31);
             this.panel1.TabIndex = 10;
@@ -406,6 +406,7 @@
             this.Controls.Add(this.DGV_Attaque);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "TableauAttaque";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TableauAttaque_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);

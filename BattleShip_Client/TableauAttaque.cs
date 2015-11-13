@@ -402,8 +402,8 @@ namespace BattleShip_Client
         private void TableauAttaque_FormClosing(object sender, FormClosingEventArgs e)
         {
             // EnvoyerMessageServeur("FermerConnexion");
-            socket.Dispose();
             Dispose();
+            socket.Dispose();
         }
 
         private void BTN_Attaquer_EnabledChanged(object sender, EventArgs e)
